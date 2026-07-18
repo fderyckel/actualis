@@ -1,0 +1,26 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Elixir / Phoenix
+_build/
+deps/
+cover/
+doc/
+erl_crash.dump
+priv/static/assets/
+
+# JavaScript / TypeScript
+node_modules/
+dist/
+.vite/
+playwright-report/
+test-results/
+
+# Rust
+target/
+
+# Local runtime data
+tmp/
+*.log
