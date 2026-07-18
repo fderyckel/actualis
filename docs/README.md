@@ -1,0 +1,23 @@
+# Actualis core-kernel documentation
+
+Actualis documentation has two coordinated tracks. Both are generated and maintained with agent assistance, reviewed against the implementation, and written so a person can use them without reading source code.
+
+| Track | Primary audience | Answers | Entry point |
+|---|---|---|---|
+| Technical reference | Coding agents, maintainers, architects, reviewers | What exists, why it exists, how it behaves, and what must remain true | [Core-kernel technical reference](technical/core-kernel/README.md) |
+| User guide | Operators, supervisors, administrators, support | What Actualis means, how to complete work, and how to recover from problems | [Core-kernel user guide](user/core-kernel/README.md) |
+
+The tracks are not copies. A technical page documents contracts, invariants, authorization, persistence, and failure behavior. A user page documents goals, prerequisites, visible steps, outcomes, and recovery. They link to each other through the [documentation map](doc-map.yaml).
+
+## Working agreement
+
+Every implementation change must follow the [documentation workflow](process/documentation-workflow.md). Documentation is part of the change, not a follow-up task.
+
+- Update the technical track for every kernel contract or implementation change.
+- Update the user track whenever a user-visible concept, permission, workflow, message, state, or recovery path changes.
+- If there is no user-visible impact, record why in the documentation map.
+- Capture screenshots only from a working, deterministic product surface. Never invent a UI screenshot to represent an implementation that does not exist.
+- Treat source, tests, migrations, and executable contracts as evidence. Treat existing prose and screenshots as material that must be re-verified.
+
+Templates are available for [technical pages](_templates/technical-page.md) and [user task pages](_templates/user-task-page.md).
+

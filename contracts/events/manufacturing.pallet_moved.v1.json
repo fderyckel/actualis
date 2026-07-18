@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "manufacturing.pallet_moved.v1",
+  "type": "object",
+  "required": ["schema_version", "command_id", "evidence_id", "pallet_id", "site_id", "source_location_id", "destination_location_id", "pallet_version"]
+}

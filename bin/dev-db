@@ -1,0 +1,18 @@
+#!/bin/sh
+set -eu
+root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+pg=${ACTUALIS_POSTGRES_BIN:-/opt/homebrew/opt/postgresql@18/bin}
+data="$root/.dev/postgres"
+port=${ACTUALIS_POSTGRES_PORT:-55433}
+mkdir -p "$root/.dev"
+case ${1:-start} in
+  start)
+    [ -f "$data/PG_VERSION" ] || "$pg/initdb" -D "$data" --auth-local=trust --auth-host=trust --no-locale --encoding=UTF8
+    "$pg/pg_ctl" -D "$data" status >/dev/null 2>&1 || "$pg/pg_ctl" -D "$data" -l "$root/.dev/postgres.log" -o "-h 127.0.0.1 -p $port" start
+    "$pg/createdb" -h 127.0.0.1 -p "$port" actualis_dev 2>/dev/null || true
+    "$pg/createdb" -h 127.0.0.1 -p "$port" actualis_test 2>/dev/null || true
+    echo "PostgreSQL ready on 127.0.0.1:$port" ;;
+  stop) "$pg/pg_ctl" -D "$data" stop ;;
+  status) "$pg/pg_ctl" -D "$data" status ;;
+  *) echo "Usage: bin/dev-db [start|stop|status]"; exit 2 ;;
+esac

@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+export MIX_HOME="$root/.tools/mix"
+export HEX_HOME="$root/.tools/hex"
+export HEX_CACERTS_PATH=${HEX_CACERTS_PATH:-/etc/ssl/cert.pem}
+cd "$root"
+exec mix "$@"

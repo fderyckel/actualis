@@ -1,0 +1,123 @@
+version: 1
+scope: core_kernel
+last_reviewed: 2026-07-18
+
+areas:
+  runtime_scaffold:
+    implementation_status: partial
+    source_paths:
+      - mix.exs
+      - config
+      - apps/actualis_core/mix.exs
+      - apps/actualis_core/lib/actualis.ex
+      - apps/actualis_core/lib/actualis/application.ex
+      - apps/actualis_core/lib/actualis/repo.ex
+      - apps/actualis_core/priv/repo/seeds.exs
+      - apps/actualis_core/test
+    technical_docs:
+      - docs/technical/core-kernel/README.md
+    user_docs: []
+    user_impact: none
+    user_impact_reason: Application supervision, repository configuration, and test support do not expose a human-facing workflow.
+    screenshot_status: not_applicable
+    screenshot_reason: Runtime scaffolding has no end-user surface.
+
+  kernel_schema:
+    implementation_status: implemented
+    source_paths:
+      - apps/actualis_core/lib/actualis/schema.ex
+      - apps/actualis_core/priv/repo/migrations/20260718090000_create_actualis_kernel.exs
+    technical_docs:
+      - docs/technical/core-kernel/README.md
+    user_docs:
+      - docs/user/core-kernel/README.md
+    user_impact: concepts_only
+    user_impact_reason: The storage model defines user-facing concepts, but this snapshot has no human-facing operating UI.
+    screenshot_status: not_applicable
+    screenshot_reason: No end-user surface exists in this workspace snapshot.
+
+  authority:
+    implementation_status: partial
+    source_paths:
+      - apps/actualis_core/lib/actualis/authority.ex
+      - apps/actualis_core/lib/actualis/authority/decision.ex
+      - apps/actualis_core/lib/actualis/authority/principal.ex
+      - apps/actualis_core/lib/actualis/authority/device.ex
+      - apps/actualis_core/lib/actualis/authority/operator_assignment.ex
+      - apps/actualis_core/lib/actualis/authority/policy_version.ex
+      - apps/actualis_core/lib/actualis/authority/capability_grant.ex
+      - apps/actualis_core/priv/repo/migrations/20260718090000_create_actualis_kernel.exs
+    technical_docs:
+      - docs/technical/core-kernel/README.md
+    user_docs:
+      - docs/user/core-kernel/README.md
+    user_impact: concepts_only
+    user_impact_reason: In-process policy evaluation exists; no authentication or authority administration surface is present.
+    screenshot_status: not_applicable
+    screenshot_reason: No authority administration surface exists in this workspace snapshot.
+
+  manufacturing:
+    implementation_status: partial
+    source_paths:
+      - apps/actualis_core/lib/actualis/manufacturing/site.ex
+      - apps/actualis_core/lib/actualis/manufacturing/location.ex
+      - apps/actualis_core/lib/actualis/manufacturing/pallet.ex
+      - apps/actualis_core/lib/actualis/manufacturing/move_pallet.ex
+      - apps/actualis_core/lib/actualis/manufacturing/movement.ex
+      - apps/actualis_core/priv/repo/migrations/20260718090000_create_actualis_kernel.exs
+    technical_docs:
+      - docs/technical/core-kernel/README.md
+    user_docs:
+      - docs/user/core-kernel/README.md
+    user_impact: concepts_only
+    user_impact_reason: A governed pallet movement handler and JSON route exist; no end-user UI exposes them in this snapshot.
+    screenshot_status: not_applicable
+    screenshot_reason: No manufacturing UI exists in this workspace snapshot.
+
+  capability_runtime:
+    implementation_status: partial
+    source_paths:
+      - apps/actualis_core/lib/actualis/capability_runtime.ex
+      - apps/actualis_core/lib/actualis/capability_runtime/canonical.ex
+      - apps/actualis_core/lib/actualis/capability_runtime/command.ex
+      - apps/actualis_core/lib/actualis/capability_runtime/registry.ex
+    technical_docs:
+      - docs/technical/core-kernel/README.md
+    user_docs:
+      - docs/user/core-kernel/README.md
+    user_impact: concepts_only
+    user_impact_reason: Transactional command execution and a JSON route exist for pallet movement; no end-user UI exposes them.
+    screenshot_status: not_applicable
+    screenshot_reason: No command UI exists in this workspace snapshot.
+
+  execution_evidence_and_projection:
+    implementation_status: partial
+    source_paths:
+      - apps/actualis_core/lib/actualis/evidence.ex
+      - apps/actualis_core/lib/actualis/execution/command_receipt.ex
+      - apps/actualis_core/lib/actualis/execution/outbox_event.ex
+      - apps/actualis_core/lib/actualis/evidence/record.ex
+      - apps/actualis_core/lib/actualis/projection.ex
+      - apps/actualis_core/lib/actualis/projection/delta.ex
+      - apps/actualis_core/priv/repo/migrations/20260718090000_create_actualis_kernel.exs
+    technical_docs:
+      - docs/technical/core-kernel/README.md
+    user_docs:
+      - docs/user/core-kernel/README.md
+    user_impact: concepts_only
+    user_impact_reason: Receipts, evidence, outbox events, snapshots, and deltas are implemented and partly exposed by JSON; no end-user UI exposes them.
+    screenshot_status: not_applicable
+    screenshot_reason: These capabilities are exposed as JSON, not as a human-facing visual surface.
+
+  governed_http_api:
+    implementation_status: partial
+    source_paths:
+      - apps/actualis_web
+    technical_docs:
+      - docs/technical/core-kernel/README.md
+    user_docs:
+      - docs/user/core-kernel/README.md
+    user_impact: api_only
+    user_impact_reason: JSON endpoints expose kernel commands and reads, but there is no human-facing end-user interface.
+    screenshot_status: not_applicable
+    screenshot_reason: The current transport is JSON only; a screenshot would not help an end user operate Actualis.

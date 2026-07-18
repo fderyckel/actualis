@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+"$root/bin/dev-db" start
+"$root/bin/mix-local" local.hex --force
+"$root/bin/mix-local" deps.get
+"$root/bin/mix-local" ecto.setup
+echo "Ready: bin/mix-local phx.server"

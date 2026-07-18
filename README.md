@@ -1,60 +1,78 @@
 # Actualis Core
 
-Actualis Core is the governed authority, decision, commitment, execution, and evidence kernel described in *Actualis Stack - Architecture Vision and Implementation Blueprint v0.1* (17 July 2026).
+Actualis Core is a production-oriented constitutional-kernel proof built as an Elixir/Phoenix modular monolith backed by PostgreSQL.
 
-This repository contains the core architecture only. Manufacturing, education, commerce, experience packages, edge agents, telemetry, solvers, AI, communication providers, and wire-protocol adapters are consumers or adjacent components. They do not belong in the core.
+The implemented vertical slice proves that one pallet movement can be:
 
-## Core responsibility
+- requested by a resolved human and device identity;
+- authorized by active principal, device trust, site assignment, purpose, grant, and policy version;
+- protected by idempotency and expected-version concurrency;
+- committed with the pallet movement, evidence, outbox event, and two filtered projection deltas in one transaction;
+- replayed safely or reconstructed from retained evidence.
 
-Actualis Core owns:
+## Architecture challenge and scope
 
-- cell and principal context;
-- capability registration and governed invocation;
-- authorization policy evaluation and obligations;
-- commitment and calendar envelopes;
-- intent, scenario, decision, and selection metadata;
-- command execution, acknowledgement, compensation, and durable coordination;
-- evidence, provenance, audit reconstruction, and retention metadata;
-- transactional outbox/inbox and stable ports to adjacent components.
+The proposal is directionally sound, but its 9–12 month roadmap is not one implementation unit. This repository deliberately implements the Stage 1 exit condition and a thin synchronization proof. It does not pretend that development headers are authentication or that an outbox row is delivered integration.
 
-Domain packages own their relational schemas, business invariants, domain capability handlers, and domain events. Core orchestrates them without interpreting or storing their business entities.
+The command body cannot choose its principal, device, or capability. The local HTTP adapter injects identity from headers, and authority data determines device trust. Production must replace those headers with verified OIDC and authenticated device credentials.
 
-## First outcome
+## Local setup
 
-The first release candidate must prove this runtime path with a conformance domain fixture:
+Elixir 1.20.2, Erlang/OTP 29, PostgreSQL 18.4, Hex, and Phoenix dependencies are installed or pinned locally.
 
-`cell + principal + purpose -> capability contract -> authorization -> domain handler -> atomic effects + evidence + outbox -> acknowledgement -> audit reconstruction`
+```sh
+bin/setup
+bin/mix-local phx.server
+```
 
-The fixture exists only to test the core contract. A real manufacturing or education package remains a separate product implementation and is required before calling the wider stack proven.
+Then open [the OpenAPI document](http://localhost:4000/api/openapi.json) or check [health](http://localhost:4000/api/health).
 
-## Documents
+Run verification with:
 
-- [Implementation plan](docs/IMPLEMENTATION_PLAN.md)
-- [Core runtime skeleton](docs/WALKING_SKELETON.md)
-- [Quality gates](docs/QUALITY_GATES.md)
-- [Architecture baseline](architecture/README.md)
-- [Contributing](CONTRIBUTING.md)
+```sh
+bin/mix-local quality
+MIX_ENV=prod bin/mix-local compile --warnings-as-errors
+```
 
-## Core rules
+## Demo command
 
-- Domain meaning stays outside the kernel.
-- Every consequential action crosses one governed capability boundary.
-- PostgreSQL is the authoritative relational store for a cell.
-- Domain handlers own business invariants and state; Core owns invocation, authority, coordination, and evidence envelopes.
-- Every caller is an identified principal, including humans, devices, integrations, workers, and AI.
-- AI may be represented as a principal but cannot grant authority or approve itself.
-- New infrastructure is added only after a measured quality scenario proves the need.
+After `bin/setup`, submit:
 
-## Deliberately not in this repository
+```sh
+curl -X POST http://localhost:4000/api/v1/capabilities/manufacturing.move_pallet \
+  -H 'content-type: application/json' \
+  -H 'x-actualis-principal-id: 33333333-3333-4333-8333-333333333333' \
+  -H 'x-actualis-device-id: 44444444-4444-4444-8444-444444444444' \
+  -d '{
+    "purpose":"fulfil_material_movement",
+    "scope":{"site_id":"11111111-1111-4111-8111-111111111111"},
+    "input":{
+      "pallet_id":"77777777-7777-4777-8777-777777777777",
+      "source_location_id":"22222222-2222-4222-8222-222222222221",
+      "destination_location_id":"22222222-2222-4222-8222-222222222222",
+      "reason":"Replenish production"
+    },
+    "expected_version":1,
+    "idempotency_key":"demo-move-0001"
+  }'
+```
 
-- Manufacturing, education, commerce, or other domain models
-- Product experiences and the Surface SDK
-- Edge protocol drivers and raw telemetry ingestion
-- Solvers, simulations, runtime AI, and semantic analytics
-- Email/SMS providers, webhooks, JSON-RPC, and other Link/Relay adapters
-- A generic entity model, schema compiler, or universal ontology
-- Kubernetes, NATS, Temporal, ClickHouse, OpenSearch, graph databases, or vector databases until separately justified
+Repeating the identical request returns the original command and evidence identifiers with `"replayed": true`. Reusing the key with a different request is rejected.
 
-## Repository status
+## Current production blockers
 
-Planning and architecture baseline. No production code exists yet.
+- OIDC verification and cryptographic device authentication;
+- outbox delivery, signing, acknowledgement, retry, reconciliation, and dead letters;
+- append-only evidence enforcement, object evidence, and retention;
+- projection revocation worker, realtime transport, and offline client storage;
+- rate limiting, security telemetry, deployment templates, recovery rehearsal, and production-shaped benchmarks;
+- the operator tablet and supervisor workbench user interfaces.
+
+See [ADR 0001](architecture/adrs/0001-first-kernel.md), the [threat model](architecture/threat-models/pallet-move.md), and the [technical reference](docs/technical/core-kernel.md).
+
+## Engineering standards
+
+All new and materially changed code and documentation follows the
+[Actualis engineering standards](docs/engineering/README.md). The standards define the
+core/kernel boundary, Elixir/Phoenix/Ecto/PostgreSQL conventions, documentation requirements, and
+the automated and human merge gates.

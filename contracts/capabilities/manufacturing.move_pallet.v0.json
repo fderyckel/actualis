@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "manufacturing.move_pallet v0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["purpose", "scope", "input", "expected_version", "idempotency_key"],
+  "properties": {
+    "purpose": {"type": "string", "minLength": 3},
+    "scope": {"type": "object", "required": ["site_id"], "properties": {"site_id": {"type": "string", "format": "uuid"}}},
+    "input": {"type": "object", "required": ["pallet_id", "source_location_id", "destination_location_id", "reason"]},
+    "expected_version": {"type": "integer", "minimum": 1},
+    "idempotency_key": {"type": "string", "minLength": 8},
+    "evidence_references": {"type": "array", "items": {"type": "string"}},
+    "client_context": {"type": "object"}
+  }
+}
