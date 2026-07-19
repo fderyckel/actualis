@@ -68,9 +68,11 @@ the documented process.
 
 ## Actualis architecture references
 
-These standards govern the implemented kernel described by:
+These standards govern the Core architecture and the current manufacturing reference slice
+described by:
 
-- [ADR 0001: First constitutional kernel](../../architecture/adrs/0001-first-kernel.md)
+- [ADR 0003: Domain packages remain outside Actualis Core](../../architecture/adr/0003-domain-packages-outside-core.md)
+- [ADR 0006: Pallet movement belongs to a manufacturing application module](../../architecture/adr/0006-pallet-movement-application-module.md)
 - [Core-kernel technical reference](../technical/core-kernel.md)
 - [Pallet-move threat model](../../architecture/threat-models/pallet-move.md)
 - [Capability contract](../../contracts/capabilities/manufacturing.move_pallet.v0.json)

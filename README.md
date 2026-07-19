@@ -27,6 +27,10 @@ bin/mix-local phx.server
 
 Then open [the OpenAPI document](http://localhost:4000/api/openapi.json) or check [health](http://localhost:4000/api/health).
 
+For a minimal Debian or Ubuntu VM, follow the
+[fresh-VM evaluation guide](docs/user/installation/fresh-vm.md). It keeps Phoenix and PostgreSQL
+private and uses an SSH tunnel for access.
+
 Run verification with:
 
 ```sh
@@ -68,7 +72,11 @@ Repeating the identical request returns the original command and evidence identi
 - rate limiting, security telemetry, deployment templates, recovery rehearsal, and production-shaped benchmarks;
 - the operator tablet and supervisor workbench user interfaces.
 
-See [ADR 0001](architecture/adrs/0001-first-kernel.md), the [threat model](architecture/threat-models/pallet-move.md), and the [technical reference](docs/technical/core-kernel.md).
+Docker Engine is optional host preparation, not an Actualis installer. The repository does not yet
+contain a Dockerfile, Compose manifest, or published application image; see the [deployment status
+and production gaps](docs/technical/deployment/README.md).
+
+See the [pallet-movement application-module decision](architecture/adr/0006-pallet-movement-application-module.md), the [threat model](architecture/threat-models/pallet-move.md), and the [technical reference](docs/technical/core-kernel.md).
 
 ## Engineering standards
 

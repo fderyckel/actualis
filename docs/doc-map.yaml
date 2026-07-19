@@ -121,3 +121,22 @@ areas:
     user_impact_reason: JSON endpoints expose kernel commands and reads, but there is no human-facing end-user interface.
     screenshot_status: not_applicable
     screenshot_reason: The current transport is JSON only; a screenshot would not help an end user operate Actualis.
+
+  deployment:
+    implementation_status: partial
+    source_paths:
+      - .tool-versions
+      - bin/dev-db
+      - bin/setup
+      - config/dev.exs
+      - config/prod.exs
+      - config/runtime.exs
+      - README.md
+    technical_docs:
+      - docs/technical/deployment/README.md
+    user_docs:
+      - docs/user/installation/fresh-vm.md
+    user_impact: administrator_procedure
+    user_impact_reason: Administrators can prepare a fresh VM and run a loopback-only evaluation, but no production deployment is available.
+    screenshot_status: not_applicable
+    screenshot_reason: The procedure uses a terminal and JSON health response; a screenshot would not improve task completion.

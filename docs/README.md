@@ -21,3 +21,7 @@ Every implementation change must follow the [documentation workflow](process/doc
 
 Templates are available for [technical pages](_templates/technical-page.md) and [user task pages](_templates/user-task-page.md).
 
+## Installation and deployment
+
+- Administrators: [prepare a fresh Debian or Ubuntu VM](user/installation/fresh-vm.md).
+- Maintainers: [fresh-VM deployment status and production gaps](technical/deployment/README.md).

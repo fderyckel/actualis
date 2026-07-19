@@ -25,6 +25,8 @@ The implementation adopts the Actualis Stack Architecture Vision v0.1 boundaries
 8. Evidence is durable and reconstructable; derived projections are replaceable.
 9. Wire protocols and provider integrations are adapters around Core ports.
 10. Extraction into services occurs only after an independent resource, security, availability, network, or cadence requirement is demonstrated.
+11. Core authorization never substitutes for local, safety-rated, or physical protection; a lower safety layer may always inhibit an operation.
+12. Replay and simulation use explicit versioned inputs, recorded nondeterministic results, and isolated state; neither may silently repeat production side effects.
 
 ## Internal modules
 
@@ -54,3 +56,6 @@ No TypeScript UI, Rust edge agent, solver, telemetry store, or provider adapter 
 - [ADR 0001](adr/0001-capability-centric-modular-monolith.md)
 - [ADR 0002](adr/0002-single-cell-postgresql-authority.md)
 - [ADR 0003](adr/0003-domain-packages-outside-core.md)
+- [ADR 0004](adr/0004-safety-and-operational-authority-boundary.md)
+- [ADR 0005](adr/0005-deterministic-replay-and-simulation-contract.md)
+- [ADR 0006](adr/0006-pallet-movement-application-module.md)
