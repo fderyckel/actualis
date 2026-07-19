@@ -1,4 +1,4 @@
-# Actualis core-kernel documentation
+# Actualis v0 documentation
 
 Actualis documentation has two coordinated tracks. Both are generated and maintained with agent assistance, reviewed against the implementation, and written so a person can use them without reading source code.
 
@@ -6,6 +6,10 @@ Actualis documentation has two coordinated tracks. Both are generated and mainta
 |---|---|---|---|
 | Technical reference | Coding agents, maintainers, architects, reviewers | What exists, why it exists, how it behaves, and what must remain true | [Core-kernel technical reference](technical/core-kernel/README.md) |
 | User guide | Operators, supervisors, administrators, support | What Actualis means, how to complete work, and how to recover from problems | [Core-kernel user guide](user/core-kernel/README.md) |
+
+The first product consumer has its own [manufacturing reference](technical/manufacturing-reference/README.md).
+It documents product schemas, invariants, projections, and the Core integration seam without
+presenting those concepts as kernel behavior.
 
 The tracks are not copies. A technical page documents contracts, invariants, authorization, persistence, and failure behavior. A user page documents goals, prerequisites, visible steps, outcomes, and recovery. They link to each other through the [documentation map](doc-map.yaml).
 

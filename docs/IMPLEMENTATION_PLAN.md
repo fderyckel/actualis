@@ -4,7 +4,9 @@
 
 Within the first 90 days, deliver a production-shaped, single-cell Actualis Core runtime that a separate domain package can integrate without bypassing authority, transactions, evidence, or delivery guarantees.
 
-This plan implements the Core architecture only. It does not implement the manufacturing, education, or commerce proof slices from the wider Actualis Stack plan.
+This plan prioritizes the Core architecture. A narrow, separately owned manufacturing reference
+application is included only to validate the Core integration seam; it is not the wider
+manufacturing proof slice, and education and commerce remain out of scope.
 
 ## Definition of Core
 
@@ -23,6 +25,24 @@ Core does not own concrete operational entities or invariants. A teacher, learne
 
 ## Core v0 scope
 
+### Checkpoint — 2026-07-19
+
+Implemented in the current vertical slice:
+
+- manufacturing ownership is separated into `actualis_manufacturing` without introducing a
+  network boundary;
+- Core selects configured handlers through a domain-neutral registry and invokes them inside the
+  Core-owned transaction;
+- product handlers append durable event envelopes through the Core delivery port;
+- authority uses generic `scope_id`, with nullable legacy `site_id` columns retained only for the
+  expand/migrate/contract transition; and
+- a neutral conformance fixture plus a Core source-boundary test exercises the seam without
+  manufacturing vocabulary.
+
+Still required before Core v0 is integration-ready: complete the legacy scope contract migration,
+introduce deterministic clock and identifier ports, broaden authority and obligation semantics,
+and implement the evidence and delivery guarantees listed below.
+
 ### Build now
 
 - One routable cell and one fenced PostgreSQL writer.
@@ -31,7 +51,9 @@ Core does not own concrete operational entities or invariants. A teacher, learne
 - Versioned capability registry and invocation pipeline.
 - Policy decision contract with relationships, attributes, purpose, context, risk, fields, obligations, and safe explanations.
 - Idempotency ledger, expected-version behavior, transactional effect collector, and safe retry rules.
+- Explicit clock, identifier, and randomness ports plus versioned replay inputs for consequential evaluation.
 - Commitment/calendar, scenario/decision, execution, and evidence envelopes with governed lifecycle transitions.
+- Criticality, freshness, expiry, acknowledgement, and enforcement-boundary fields for safety-relevant command contracts.
 - Transactional outbox/inbox and bounded durable workers.
 - S3-compatible evidence port with hashes, retention metadata, and integrity checks.
 - Authorized audit reconstruction.
@@ -42,6 +64,7 @@ Core does not own concrete operational entities or invariants. A teacher, learne
 
 - Surface projections and sync
 - Edge observations and commands
+- Safety-rated controls, equipment interlocks, and physical energy isolation
 - Signal telemetry promotion
 - Decide solver requests/results/explanations
 - Guide AI/insight requests
@@ -56,6 +79,7 @@ Core emits or accepts typed envelopes at these boundaries. The adjacent componen
 - Product experiences and client SDK
 - Generic schema/capability compiler or universal entity store
 - Raw telemetry storage, solvers, runtime AI, and provider delivery
+- Full simulation runtime, general formal-verification platform, zero-knowledge proof infrastructure, and fleet-wide hardware attestation
 - NATS, Temporal, ClickHouse, OpenSearch, graph/vector databases, and Kubernetes
 - Multi-cell control plane, global writes, cross-region disaster recovery, and production support console
 
@@ -87,7 +111,9 @@ Repository shape introduced as artifacts arrive:
 /deployment         cell template, migrations, runbooks, SLOs, and restore tools
 ```
 
-No `/modules/manufacturing`, `/modules/education`, `/experiences`, `/edge`, `/signal`, `/decide`, `/guide`, `/relay`, or `/link` implementation belongs in this repository.
+No manufacturing, education, commerce, experience, device-protocol, telemetry, solver, AI-task, or
+provider semantics belong inside `actualis_core`. Narrow adjacent proof applications may live in
+the umbrella when they preserve this dependency rule and exist to validate Core contracts.
 
 ## Twelve-week delivery plan
 
@@ -99,6 +125,8 @@ Deliverables:
 - Module dependency graph and schema ownership rules.
 - Canonical envelopes for cell, principal, capability, policy, obligation, commitment, scenario, decision, execution, evidence, event, outbox, and inbox.
 - Error taxonomy, compatibility rules, lifecycle state machines, and temporality policy.
+- Criticality classification and the boundary between Core authorization, Edge enforcement, local safety control, and physical protection.
+- Deterministic replay contract covering clocks, generated identifiers, randomness, external results, version retention, and side-effect suppression.
 - Threat model for cell scope, support/break-glass, policy administration, replay, object evidence, and adapter trust.
 - Quality scenarios, initial SLOs, and data classification/retention map.
 
@@ -110,6 +138,7 @@ Deliverables:
 
 - Phoenix/PostgreSQL project with module-boundary checks and module-owned migration paths.
 - Cell context, configuration version, request correlation, workload identity, and bounded pool configuration.
+- Injectable clock and identifier ports with deterministic test implementations; randomness is prohibited unless it enters through an explicit recorded port.
 - OIDC principal-resolution port with deterministic human/device/integration/worker/AI test principals.
 - Reproducible local cell, synthetic fixtures, structured logs, traces, metrics, and health/readiness semantics.
 - CI for formatting, tests, dependency/secret scanning, migration validation, SBOM, and artifact digest.
@@ -125,6 +154,7 @@ Deliverables:
 - Relationship, purpose, attribute, context, risk, field, and obligation evaluation.
 - Default deny, safe reason codes, policy versioning, delegation, support grant, break-glass, and separation-of-duties behavior.
 - Idempotency ledger, expected-version contract, concurrency control, and deterministic result replay.
+- Replay fixture proving the same recorded inputs produce the same governed result without repeating domain, delivery, or external effects.
 - Conformance fixture invoking a domain-owned handler in a separate schema.
 
 Exit gate: the fixture proves allow, deny, allow-with-obligations, stale-version, duplicate, cross-cell, and self-approval behavior without adding domain semantics to Core.
@@ -136,6 +166,7 @@ Deliverables:
 - Commitment and calendar envelopes with proposed-to-verified lifecycle and effective-time rules.
 - Intent, scenario snapshot reference, candidate, selection, explanation reference, approval, and decision records.
 - Execution command, dispatch, expiry, acknowledgement, compensation reference, and durable job state.
+- Enforcement-boundary and criticality metadata, with stale, expired, payload-mismatched, and context-mismatched rejection plus idempotent duplicate acknowledgement.
 - Transaction boundary that atomically combines domain effects with Core lifecycle transitions when required.
 - Invalid-transition, approval, conflict, expiry, and retry tests.
 
@@ -146,6 +177,7 @@ Exit gate: no proposal becomes a commitment and no decision becomes execution wi
 Deliverables:
 
 - Evidence metadata, content hash, provenance links, retention class, legal-hold hook, and integrity status.
+- Observation provenance that distinguishes authenticated origin and measured device state from domain validation of physical truth.
 - S3-compatible evidence port and deterministic local implementation.
 - Authorized audit reconstruction across Core module interfaces.
 - Transactional outbox/inbox, retry state, deduplication, dead-letter state, and redrive contract.
@@ -161,6 +193,7 @@ Deliverables:
 - Disposable cell from a versioned template with synthetic principals, policies, and the conformance fixture.
 - Immutable artifact promotion through test and production-shaped pre-production.
 - Expand/migrate/contract rehearsal, backup restore, object-integrity reconciliation, worker loss, queue backlog, and database failover exercises.
+- Replay compatibility report and an isolated simulation-harness proof with production delivery ports disabled; no general-purpose simulator is required.
 - Load report for capability throughput, policy evaluation, outbox lag, connection-pool isolation, and audit queries.
 - Published Core conformance kit, integration guide, updated ADRs, measured bottlenecks, and go/revise recommendation.
 
@@ -188,6 +221,8 @@ Recommended initial team: one Core architecture/domain-model lead, three Core en
 - Context map and dependency graph
 - Core envelope schemas and compatibility rules
 - Lifecycle state machines and temporality rules
+- Safety/operational authority boundary and capability criticality classification
+- Deterministic replay input and version-retention contract
 - Threat model and quality scenarios
 
 ### Epic B: cell, identity, and authority
@@ -202,6 +237,7 @@ Recommended initial team: one Core architecture/domain-model lead, three Core en
 - Registry and version resolution
 - Invocation validation and handler port
 - Idempotency, expected version, transaction/effect collector
+- Explicit clock/identifier ports and side-effect-free historical replay
 - Conformance fixture and kit
 
 ### Epic D: commitments, decisions, and execution
@@ -209,11 +245,13 @@ Recommended initial team: one Core architecture/domain-model lead, three Core en
 - Commitment/calendar envelope
 - Scenario/decision/approval envelope
 - Dispatch/acknowledgement/expiry/compensation lifecycle
+- Enforcement-boundary metadata, stale/expired/context-mismatched rejection, and idempotent duplicate acknowledgement
 - Effective-date, concurrency, and recovery tests
 
 ### Epic E: evidence and delivery
 
 - Evidence graph, object port, integrity, retention
+- Observation origin, assurance, confidence, and validation semantics
 - Audit reconstruction
 - Outbox/inbox, retry, dead-letter, and redrive
 - Adjacent-component port contracts
@@ -231,8 +269,10 @@ Recommended initial team: one Core architecture/domain-model lead, three Core en
 - Human, device, integration, worker, support, and AI principal types use the same governed authorization contract.
 - Allow, deny, obligation, idempotency, stale-version, cross-cell, delegation, and separation-of-duties cases are reproducible.
 - Commitment, decision, approval, execution, acknowledgement, and evidence lifecycles are explicit and cannot be skipped.
+- Core authorization is distinguishable from physical-safety approval, and no contract permits a higher layer to override a lower safety enforcement boundary.
 - Domain effects, Core evidence, and outbox entries commit atomically where required.
 - Worker restart, duplicate delivery, and redrive do not duplicate authoritative effects.
+- Historical replay uses recorded inputs and cannot repeat domain, outbox, device, solver, AI, or provider effects.
 - An authorized audit reconstructs the full invocation without cross-module SQL.
 - One immutable artifact promotes to pre-production and restores with evidence integrity intact.
 - Interactive capability work retains its SLO while background delivery saturates its bounded pool.

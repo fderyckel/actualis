@@ -23,7 +23,7 @@ The authority order is:
 
 A lower layer may reject or inhibit an operation authorized by a higher layer. A higher layer cannot override a lower safety layer. A Core authorization is permission to attempt an operation through the next enforcement boundary; it is never evidence that the operation is physically safe or that it occurred.
 
-Safety-relevant capability contracts declare freshness, expiry, expected version, acknowledgement, and failure behavior. Edge and device adapters reject expired, stale, replayed, or context-mismatched commands. Loss of Core connectivity must not weaken an existing safety state. Any bounded disconnected operation must be explicitly defined by the owning domain package and local safety design.
+Safety-relevant capability contracts declare freshness, expiry, expected version, acknowledgement, idempotency, and failure behavior. Edge and device adapters reject expired, stale, payload-mismatched, or context-mismatched commands. An identical duplicate delivery is acknowledged or rejected idempotently without repeating a physical or authoritative effect. Loss of Core connectivity must not weaken an existing safety state. Any bounded disconnected operation must be explicitly defined by the owning domain package and local safety design.
 
 In accordance with ADR 0003, domain packages own concrete safety invariants and certification artifacts. Core owns stable envelopes for criticality, authorization, obligations, command expiry, acknowledgement, and evidence references. Selected high-consequence protocols may require model-based or formal analysis, but such analysis does not replace implementation verification, equipment certification, or physical safeguards.
 

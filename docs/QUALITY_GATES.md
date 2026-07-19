@@ -1,5 +1,9 @@
 # Quality gates for Actualis Core
 
+These gates operationalize the accepted architecture decisions, including
+[ADR 0004](../architecture/adr/0004-safety-and-operational-authority-boundary.md) and
+[ADR 0005](../architecture/adr/0005-deterministic-replay-and-simulation-contract.md).
+
 ## Boundary
 
 - Core contains no manufacturing, education, commerce, UI, device-protocol, telemetry, solver, AI-task, or provider schema.
@@ -22,6 +26,16 @@
 - Concurrent invocations cannot both violate a domain aggregate version.
 - Domain effect, authorization result, evidence links, and outbox record commit atomically.
 
+## Safety and operational authority
+
+- A capability authorization is permission to attempt an operation through the next enforcement boundary; it is never represented as proof of physical safety or execution.
+- A lower physical, safety-rated, device, or Edge enforcement layer can inhibit an operation and no higher-layer principal or grant can override it.
+- Safety-relevant contracts declare criticality, freshness, expiry, expected state, acknowledgement, and fail-safe behavior where applicable.
+- Expired, stale, payload-mismatched, or context-mismatched commands reject before a new authoritative effect is committed. An identical idempotent retry returns or acknowledges the recorded outcome without repeating the effect.
+- Disconnected operation is denied by default. Any bounded offline authority names its scope, duration, local invariants, reconciliation behavior, and recovery test.
+- Signatures and hardware-backed attestation are treated as evidence of identity, origin, integrity, or measured device state, not as proof that a physical observation is true.
+- Domain packages own concrete safety invariants and certification evidence; Core conformance tests verify only the declared Core envelope and enforcement semantics.
+
 ## Authority and privacy
 
 - Tests cover principal x relationship x purpose x attribute x context x risk x cell.
@@ -40,10 +54,21 @@
 ## Evidence and delivery
 
 - Principal, purpose, policy, capability, input provenance, effects, versions, and outcome are linked.
+- Observation evidence preserves source, observation time, ingestion time, assurance or calibration references, confidence, and validation status when those fields are supplied by the owning domain.
 - Object hashes, retention metadata, and evidence links survive backup and restore.
 - Outbox and inbox processing are at-least-once and idempotent.
 - Adjacent systems cannot write authoritative Core or domain tables directly.
 - Audit reconstruction uses authorized module interfaces rather than cross-schema queries.
+
+## Deterministic replay and simulation
+
+- Replay identifies an explicit input set: snapshot or starting versions, ordered records, contract and policy versions, configuration, clock values, generated identifiers, randomness inputs, and recorded external results where applicable.
+- Capability and policy evaluation cannot depend on unrecorded wall time, randomness, process state, environment state, or network results.
+- Historical replay returns recorded external, device, solver, and AI results by default; it does not silently invoke them again.
+- Replaying a completed invocation cannot repeat an authoritative effect, publish a new outbox event, or dispatch an external side effect.
+- A simulation uses an isolated namespace and disabled production delivery ports. Negative tests prove that simulated state cannot mutate authoritative tables or enter a production outbox.
+- Replay and simulation results declare their determinism scope, substituted inputs, and any unsupported historical version.
+- Retained contracts and evidence have a tested replay path for the declared retention period or an explicit, reviewable incompatibility record.
 
 ## Performance and isolation
 

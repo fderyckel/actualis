@@ -1,6 +1,7 @@
 defmodule ActualisWeb.KernelControllerTest do
   use ActualisWeb.ConnCase, async: false
-  alias Actualis.KernelFixture
+
+  alias ActualisManufacturing.TestFixture
 
   test "identity is required", %{conn: conn} do
     conn = post(conn, "/api/v1/capabilities/manufacturing.move_pallet", %{})
@@ -8,18 +9,20 @@ defmodule ActualisWeb.KernelControllerTest do
   end
 
   test "HTTP boundary executes and replays", %{conn: conn} do
-    f = KernelFixture.create()
-    body = KernelFixture.command(f) |> Map.drop(["principal_id", "device_id", "capability"])
+    fixture = TestFixture.create()
+    body = TestFixture.command(fixture) |> Map.drop(["principal_id", "device_id", "capability"])
 
     first =
-      conn |> authenticate(f) |> post("/api/v1/capabilities/manufacturing.move_pallet", body)
+      conn
+      |> authenticate(fixture)
+      |> post("/api/v1/capabilities/manufacturing.move_pallet", body)
 
     assert %{"ok" => true, "replayed" => false, "evidence_id" => evidence} =
              json_response(first, 200)
 
     second =
       build_conn()
-      |> authenticate(f)
+      |> authenticate(fixture)
       |> post("/api/v1/capabilities/manufacturing.move_pallet", body)
 
     assert %{"ok" => true, "replayed" => true, "evidence_id" => ^evidence} =
@@ -32,9 +35,9 @@ defmodule ActualisWeb.KernelControllerTest do
     assert Map.has_key?(spec["paths"], "/api/v1/capabilities/manufacturing.move_pallet")
   end
 
-  defp authenticate(conn, f) do
+  defp authenticate(conn, fixture) do
     conn
-    |> put_req_header("x-actualis-principal-id", f.operator.id)
-    |> put_req_header("x-actualis-device-id", f.device.id)
+    |> put_req_header("x-actualis-principal-id", fixture.operator.id)
+    |> put_req_header("x-actualis-device-id", fixture.device.id)
   end
 end

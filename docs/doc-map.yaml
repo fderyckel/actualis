@@ -1,6 +1,6 @@
 version: 1
-scope: core_kernel
-last_reviewed: 2026-07-18
+scope: actualis_v0
+last_reviewed: 2026-07-19
 
 areas:
   runtime_scaffold:
@@ -9,30 +9,33 @@ areas:
       - mix.exs
       - config
       - apps/actualis_core/mix.exs
-      - apps/actualis_core/lib/actualis.ex
       - apps/actualis_core/lib/actualis/application.ex
       - apps/actualis_core/lib/actualis/repo.ex
-      - apps/actualis_core/priv/repo/seeds.exs
-      - apps/actualis_core/test
+      - apps/actualis_manufacturing/mix.exs
+      - apps/actualis_web/mix.exs
+      - apps/actualis_web/lib/actualis_web/application.ex
     technical_docs:
       - docs/technical/core-kernel/README.md
+      - docs/technical/deployment/README.md
     user_docs: []
     user_impact: none
-    user_impact_reason: Application supervision, repository configuration, and test support do not expose a human-facing workflow.
+    user_impact_reason: Application composition and supervision changed without adding a human-facing workflow.
     screenshot_status: not_applicable
     screenshot_reason: Runtime scaffolding has no end-user surface.
 
-  kernel_schema:
-    implementation_status: implemented
+  core_persistence:
+    implementation_status: partial
     source_paths:
-      - apps/actualis_core/lib/actualis/schema.ex
-      - apps/actualis_core/priv/repo/migrations/20260718090000_create_actualis_kernel.exs
+      - apps/actualis_core/lib/actualis/models.ex
+      - apps/actualis_core/priv/repo/migrations/20260718090000_create_kernel.exs
+      - apps/actualis_core/priv/repo/migrations/20260719090000_expand_authority_scope.exs
+      - apps/actualis_core/priv/repo/migrations/20260719100000_detach_authority_scope_from_manufacturing.exs
     technical_docs:
       - docs/technical/core-kernel/README.md
     user_docs:
       - docs/user/core-kernel/README.md
     user_impact: concepts_only
-    user_impact_reason: The storage model defines user-facing concepts, but this snapshot has no human-facing operating UI.
+    user_impact_reason: Core records and generic authority scope underpin visible concepts, but no operating UI exists.
     screenshot_status: not_applicable
     screenshot_reason: No end-user surface exists in this workspace snapshot.
 
@@ -40,74 +43,69 @@ areas:
     implementation_status: partial
     source_paths:
       - apps/actualis_core/lib/actualis/authority.ex
-      - apps/actualis_core/lib/actualis/authority/decision.ex
-      - apps/actualis_core/lib/actualis/authority/principal.ex
-      - apps/actualis_core/lib/actualis/authority/device.ex
-      - apps/actualis_core/lib/actualis/authority/operator_assignment.ex
-      - apps/actualis_core/lib/actualis/authority/policy_version.ex
-      - apps/actualis_core/lib/actualis/authority/capability_grant.ex
-      - apps/actualis_core/priv/repo/migrations/20260718090000_create_actualis_kernel.exs
+      - apps/actualis_core/lib/actualis/evidence.ex
+      - apps/actualis_core/lib/actualis/models.ex
+      - apps/actualis_core/priv/repo/migrations/20260719090000_expand_authority_scope.exs
+      - apps/actualis_core/priv/repo/migrations/20260719100000_detach_authority_scope_from_manufacturing.exs
     technical_docs:
       - docs/technical/core-kernel/README.md
     user_docs:
       - docs/user/core-kernel/README.md
     user_impact: concepts_only
-    user_impact_reason: In-process policy evaluation exists; no authentication or authority administration surface is present.
+    user_impact_reason: Authorization now uses a generic scope internally; public pallet requests still use site_id and visible behavior is unchanged.
     screenshot_status: not_applicable
-    screenshot_reason: No authority administration surface exists in this workspace snapshot.
-
-  manufacturing:
-    implementation_status: partial
-    source_paths:
-      - apps/actualis_core/lib/actualis/manufacturing/site.ex
-      - apps/actualis_core/lib/actualis/manufacturing/location.ex
-      - apps/actualis_core/lib/actualis/manufacturing/pallet.ex
-      - apps/actualis_core/lib/actualis/manufacturing/move_pallet.ex
-      - apps/actualis_core/lib/actualis/manufacturing/movement.ex
-      - apps/actualis_core/priv/repo/migrations/20260718090000_create_actualis_kernel.exs
-    technical_docs:
-      - docs/technical/core-kernel/README.md
-    user_docs:
-      - docs/user/core-kernel/README.md
-    user_impact: concepts_only
-    user_impact_reason: A governed pallet movement handler and JSON route exist; no end-user UI exposes them in this snapshot.
-    screenshot_status: not_applicable
-    screenshot_reason: No manufacturing UI exists in this workspace snapshot.
+    screenshot_reason: No authority administration surface exists.
 
   capability_runtime:
     implementation_status: partial
     source_paths:
-      - apps/actualis_core/lib/actualis/capability_runtime.ex
-      - apps/actualis_core/lib/actualis/capability_runtime/canonical.ex
-      - apps/actualis_core/lib/actualis/capability_runtime/command.ex
-      - apps/actualis_core/lib/actualis/capability_runtime/registry.ex
+      - apps/actualis_core/lib/actualis/capability
+      - apps/actualis_core/lib/actualis/delivery.ex
+      - apps/actualis_core/lib/actualis/models.ex
+      - apps/actualis_core/test/actualis/capability_runtime_test.exs
+      - apps/actualis_core/test/support/conformance_fixture.ex
     technical_docs:
       - docs/technical/core-kernel/README.md
     user_docs:
       - docs/user/core-kernel/README.md
     user_impact: concepts_only
-    user_impact_reason: Transactional command execution and a JSON route exist for pallet movement; no end-user UI exposes them.
+    user_impact_reason: The generic handler and delivery seam preserve the existing governed JSON behavior and introduce no human-facing UI.
     screenshot_status: not_applicable
-    screenshot_reason: No command UI exists in this workspace snapshot.
+    screenshot_reason: The capability runtime has no human-facing visual surface.
+
+  manufacturing_reference:
+    implementation_status: partial
+    source_paths:
+      - apps/actualis_manufacturing
+      - contracts/capabilities/manufacturing.move_pallet.v0.json
+      - contracts/events/manufacturing.pallet_moved.v1.json
+      - apps/actualis_core/priv/repo/migrations/20260718090000_create_kernel.exs
+    technical_docs:
+      - docs/technical/manufacturing-reference/README.md
+    user_docs:
+      - docs/user/core-kernel/README.md
+    user_impact: concepts_only
+    user_impact_reason: Pallet movement remains available through JSON with the same contract; no end-user manufacturing interface exists.
+    screenshot_status: not_applicable
+    screenshot_reason: No manufacturing UI exists in this workspace snapshot.
 
   execution_evidence_and_projection:
     implementation_status: partial
     source_paths:
       - apps/actualis_core/lib/actualis/evidence.ex
-      - apps/actualis_core/lib/actualis/execution/command_receipt.ex
-      - apps/actualis_core/lib/actualis/execution/outbox_event.ex
-      - apps/actualis_core/lib/actualis/evidence/record.ex
-      - apps/actualis_core/lib/actualis/projection.ex
-      - apps/actualis_core/lib/actualis/projection/delta.ex
-      - apps/actualis_core/priv/repo/migrations/20260718090000_create_actualis_kernel.exs
+      - apps/actualis_core/lib/actualis/delivery.ex
+      - apps/actualis_core/lib/actualis/models.ex
+      - apps/actualis_manufacturing/lib/actualis_manufacturing/projection.ex
+      - apps/actualis_manufacturing/lib/actualis_manufacturing/projection/delta.ex
     technical_docs:
       - docs/technical/core-kernel/README.md
+      - docs/technical/manufacturing-reference/README.md
     user_docs:
       - docs/user/core-kernel/README.md
     user_impact: concepts_only
-    user_impact_reason: Receipts, evidence, outbox events, snapshots, and deltas are implemented and partly exposed by JSON; no end-user UI exposes them.
+    user_impact_reason: Receipts, evidence, outbox intent, snapshots, and deltas remain JSON concepts without a human-facing surface.
     screenshot_status: not_applicable
-    screenshot_reason: These capabilities are exposed as JSON, not as a human-facing visual surface.
+    screenshot_reason: These capabilities are exposed as JSON rather than a visual interface.
 
   governed_http_api:
     implementation_status: partial
@@ -115,10 +113,11 @@ areas:
       - apps/actualis_web
     technical_docs:
       - docs/technical/core-kernel/README.md
+      - docs/technical/manufacturing-reference/README.md
     user_docs:
       - docs/user/core-kernel/README.md
     user_impact: api_only
-    user_impact_reason: JSON endpoints expose kernel commands and reads, but there is no human-facing end-user interface.
+    user_impact_reason: JSON endpoints now delegate to the manufacturing public context, but request and response contracts are unchanged.
     screenshot_status: not_applicable
     screenshot_reason: The current transport is JSON only; a screenshot would not help an end user operate Actualis.
 
@@ -131,12 +130,13 @@ areas:
       - config/dev.exs
       - config/prod.exs
       - config/runtime.exs
+      - mix.exs
       - README.md
     technical_docs:
       - docs/technical/deployment/README.md
     user_docs:
       - docs/user/installation/fresh-vm.md
     user_impact: administrator_procedure
-    user_impact_reason: Administrators can prepare a fresh VM and run a loopback-only evaluation, but no production deployment is available.
+    user_impact_reason: The root migration aliases now run Core and manufacturing paths; the documented setup command is unchanged.
     screenshot_status: not_applicable
     screenshot_reason: The procedure uses a terminal and JSON health response; a screenshot would not improve task completion.

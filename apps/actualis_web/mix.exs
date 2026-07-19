@@ -42,6 +42,7 @@ defmodule ActualisWeb.MixProject do
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:actualis_core, in_umbrella: true},
+      {:actualis_manufacturing, in_umbrella: true},
       {:jason, "~> 1.2"},
       {:bandit, "~> 1.5"}
     ]
@@ -52,8 +53,7 @@ defmodule ActualisWeb.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+      setup: ["deps.get"]
     ]
   end
 end

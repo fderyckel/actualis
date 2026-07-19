@@ -13,6 +13,7 @@ defmodule Actualis.Evidence do
         device_id: identity.device_id,
         capability: "evidence.read",
         purpose: purpose,
+        authorization_scope_id: site_id,
         scope: %{"site_id" => site_id}
       })
 

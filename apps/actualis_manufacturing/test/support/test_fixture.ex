@@ -1,8 +1,9 @@
-defmodule Actualis.KernelFixture do
+defmodule ActualisManufacturing.TestFixture do
   @moduledoc false
+
   alias Actualis.Authority.{Assignment, Device, Grant, Policy, Principal}
-  alias Actualis.Manufacturing.{Location, Pallet, Site}
   alias Actualis.Repo
+  alias ActualisManufacturing.{Location, Pallet, Site}
 
   def create(opts \\ %{}) do
     now = DateTime.utc_now()
@@ -27,13 +28,15 @@ defmodule Actualis.KernelFixture do
 
     insert(%Device{
       principal_id: device.id,
-      site_id: site.id,
+      scope_id: site.id,
+      legacy_site_id: site.id,
       status: Map.get(opts, :device_status, "trusted")
     })
 
     insert(%Assignment{
       principal_id: operator.id,
-      site_id: site.id,
+      scope_id: site.id,
+      legacy_site_id: site.id,
       valid_from: DateTime.add(now, -1, :hour)
     })
 
@@ -49,27 +52,41 @@ defmodule Actualis.KernelFixture do
       "version"
     ])
 
-    grant(operator, site, policy, "manufacturing.view_operator", "fulfil_material_movement", [
-      "pallet_id",
-      "label",
-      "location_id",
-      "location_code",
-      "destination_location_id",
-      "version",
-      "status",
-      "updated_at"
-    ])
+    grant(
+      operator,
+      site,
+      policy,
+      "manufacturing.view_operator",
+      "fulfil_material_movement",
+      [
+        "pallet_id",
+        "label",
+        "location_id",
+        "location_code",
+        "destination_location_id",
+        "version",
+        "status",
+        "updated_at"
+      ]
+    )
 
-    grant(operator, site, policy, "manufacturing.view_supervisor", "supervise_material_flow", [
-      "pallet_id",
-      "label",
-      "material_code",
-      "quality_status",
-      "location_id",
-      "location_code",
-      "version",
-      "status"
-    ])
+    grant(
+      operator,
+      site,
+      policy,
+      "manufacturing.view_supervisor",
+      "supervise_material_flow",
+      [
+        "pallet_id",
+        "label",
+        "material_code",
+        "quality_status",
+        "location_id",
+        "location_code",
+        "version",
+        "status"
+      ]
+    )
 
     grant(operator, site, policy, "evidence.read", "supervise_material_flow", ["*"])
 
@@ -95,17 +112,17 @@ defmodule Actualis.KernelFixture do
     }
   end
 
-  def command(f, overrides \\ %{}) do
+  def command(fixture, overrides \\ %{}) do
     base = %{
-      "principal_id" => f.operator.id,
-      "device_id" => f.device.id,
+      "principal_id" => fixture.operator.id,
+      "device_id" => fixture.device.id,
       "purpose" => "fulfil_material_movement",
       "capability" => "manufacturing.move_pallet",
-      "scope" => %{"site_id" => f.site.id},
+      "scope" => %{"site_id" => fixture.site.id},
       "input" => %{
-        "pallet_id" => f.pallet.id,
-        "source_location_id" => f.source.id,
-        "destination_location_id" => f.destination.id,
+        "pallet_id" => fixture.pallet.id,
+        "source_location_id" => fixture.source.id,
+        "destination_location_id" => fixture.destination.id,
         "reason" => "Replenish production"
       },
       "expected_version" => 1,
@@ -130,7 +147,11 @@ defmodule Actualis.KernelFixture do
   defp insert(struct), do: Repo.insert!(struct)
   defp unique(prefix), do: "#{prefix}-#{System.unique_integer([:positive, :monotonic])}"
 
-  defp deep_merge(a, b),
-    do:
-      Map.merge(a, b, fn _, x, y -> if is_map(x) and is_map(y), do: deep_merge(x, y), else: y end)
+  defp deep_merge(left, right) do
+    Map.merge(left, right, fn _, left_value, right_value ->
+      if is_map(left_value) and is_map(right_value),
+        do: deep_merge(left_value, right_value),
+        else: right_value
+    end)
+  end
 end

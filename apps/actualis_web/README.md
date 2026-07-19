@@ -1,18 +1,19 @@
-# ActualisWeb
+# Actualis Web
 
-To start your Phoenix server:
+`actualis_web` is the HTTP adapter for the Actualis umbrella. It depends on the public contexts of
+`actualis_core` and `actualis_manufacturing`; it does not own authority, transaction, or product
+rules.
 
-* Run `mix setup` to install and setup dependencies
-* Start Phoenix endpoint with `mix phx.server`
+From the repository root:
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+```sh
+bin/setup
+bin/mix-local phx.server
+```
 
-Ready to run in production? Please [check our deployment guides](https://phoenix.hexdocs.pm/deployment.html).
+Then visit the [health endpoint](http://localhost:4000/api/health) or the
+[OpenAPI document](http://localhost:4000/api/openapi.json).
 
-## Learn more
-
-* Official website: https://www.phoenixframework.org/
-* Guides: https://phoenix.hexdocs.pm/overview.html
-* Docs: https://phoenix.hexdocs.pm
-* Forum: https://elixirforum.com/c/phoenix-forum
-* Source: https://github.com/phoenixframework/phoenix
+Development identity headers are a local proof mechanism, not production authentication. See the
+[Core technical reference](../../docs/technical/core-kernel/README.md) and the
+[manufacturing reference](../../docs/technical/manufacturing-reference/README.md).

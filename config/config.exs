@@ -11,7 +11,8 @@ import Config
 
 # Configure Mix tasks and generators
 config :actualis_core,
-  ecto_repos: [Actualis.Repo]
+  ecto_repos: [Actualis.Repo],
+  capability_handlers: [ActualisManufacturing.MovePallet]
 
 config :actualis_web,
   ecto_repos: [Actualis.Repo],

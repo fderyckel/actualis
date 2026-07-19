@@ -3,7 +3,7 @@ title: Core-kernel documentation workflow
 doc_type: process
 scope: core_kernel
 status: active
-last_verified: 2026-07-18
+last_verified: 2026-07-19
 ---
 
 # Core-kernel documentation workflow
@@ -176,4 +176,8 @@ Documentation impact
 
 ## Current core-kernel limitation
 
-This repository snapshot contains a partial in-process capability runtime, pallet-movement handler, authority evaluator, projections, schemas, migration, and governed JSON endpoints, but no human-facing end-user UI. The initial user documentation is therefore a concept guide, and screenshots are correctly marked not applicable. Procedure pages and real captures become required as soon as an operable human-facing surface is introduced.
+This repository snapshot contains a partial domain-neutral capability runtime and a separately owned,
+in-process manufacturing reference application with governed JSON endpoints, but no human-facing
+end-user UI. The initial user documentation is therefore a concept guide, and screenshots are
+correctly marked not applicable. Procedure pages and real captures become required as soon as an
+operable human-facing surface is introduced.

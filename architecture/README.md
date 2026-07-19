@@ -1,6 +1,17 @@
 # Architecture baseline
 
-The implementation adopts the Actualis Stack Architecture Vision v0.1 boundaries as its starting hypothesis and narrows this repository to Actualis Core.
+The implementation adopts the Actualis Stack Architecture Vision v0.1 boundaries as its starting
+hypothesis. The repository prioritizes Actualis Core and also hosts a separately owned
+manufacturing reference application that proves the Core seam.
+
+## Current programme baseline
+
+- [Architecture Baseline v0.2](BASELINE_V0.2.md) reconciles the original stack vision with
+  accepted repository decisions, current implementation evidence, open decisions, and delivery
+  gates.
+- [Manufacturing exception and replan reality contract
+  v0.1](reality-contracts/manufacturing-exception-replan-v0.1.md) defines the selected first
+  cross-component proof journey and the evidence required before it is considered validated.
 
 ## Core versus adjacent components
 
@@ -12,6 +23,26 @@ The implementation adopts the Actualis Stack Architecture Vision v0.1 boundaries
 | Evidence graph, provenance, audit metadata, retention class | Raw telemetry payloads and domain evidence content |
 | Transactional outbox/inbox and delivery requests | Relay providers, Signal ingest, Edge transport, solver workers, AI workers, and Surface projections |
 | Stable contracts and conformance tests | Product-specific experiences and domain invariants |
+
+## Executable application boundary
+
+The current umbrella dependency direction is:
+
+```text
+actualis_core  <-  actualis_manufacturing
+       ^                    ^
+       +------ actualis_web-+
+```
+
+- `actualis_core` has no compile-time dependency on manufacturing and does not interpret product
+  payloads or query product tables.
+- `actualis_manufacturing` implements the Core capability-handler contract and owns pallet
+  schemas, invariants, events, projections, seeds, tests, and future migrations.
+- `actualis_web` is an adapter over both public contexts.
+
+The applications are modules in one deployable umbrella, not separate services. Core opens the
+repository transaction and calls the product handler in-process so domain effects, receipt,
+evidence, and durable delivery intent remain atomic.
 
 ## Accepted baseline
 
@@ -59,3 +90,4 @@ No TypeScript UI, Rust edge agent, solver, telemetry store, or provider adapter 
 - [ADR 0004](adr/0004-safety-and-operational-authority-boundary.md)
 - [ADR 0005](adr/0005-deterministic-replay-and-simulation-contract.md)
 - [ADR 0006](adr/0006-pallet-movement-application-module.md)
+- [ADR 0007](adr/0007-manufacturing-exception-replan-lead-proof-journey.md)

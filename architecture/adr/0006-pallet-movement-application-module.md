@@ -29,7 +29,30 @@ Core owns only the reusable contracts and runtime behavior used by that module, 
 - transactional effect, evidence-metadata, and outbox envelopes;
 - stable ports through which a domain module participates in the transaction.
 
-The current co-location of manufacturing code under `apps/actualis_core` is an implementation limitation of the proof slice, not a Core ownership decision. It must not be used as precedent for adding manufacturing entities or rules to the kernel. The module should be extracted behind declared Core ports before the implementation is described as conforming to the Core architecture.
+At acceptance, manufacturing code was co-located under `apps/actualis_core`. That was an
+implementation limitation of the proof slice, not a Core ownership decision, and was never
+precedent for adding manufacturing entities or rules to the kernel. The implementation status
+below records the subsequent extraction behind declared Core ports.
+
+## Implementation status — 2026-07-19
+
+The ownership boundary is now executable:
+
+- `actualis_manufacturing` is a separate umbrella application and owns the pallet handler,
+  schemas, projections, tests, seeds, and future migration path;
+- Core exposes a domain-neutral handler behaviour, configured registry, command envelope, and
+  delivery port, and opens the shared transaction;
+- a neutral Core-only fixture verifies execution, authority denial, idempotency, rollback, and
+  outbox behavior without manufacturing vocabulary; and
+- a source-boundary test rejects imports of the manufacturing application from Core.
+
+The authority-scope expansion also removes foreign keys from Core authority tables to
+manufacturing tables; a schema-level regression test protects that database boundary.
+
+The immutable bootstrap migration still contains the tables it originally created. A later
+manufacturing migration records their new ownership, and all future manufacturing schema changes
+belong to the manufacturing migration path. The nullable legacy authority `site_id` columns remain
+temporary migration debt while callers move to generic `scope_id`.
 
 ## Consequences
 
@@ -37,7 +60,8 @@ The current co-location of manufacturing code under `apps/actualis_core` is an i
 - Core must not query manufacturing tables, interpret pallet fields, or publish manufacturing projections itself.
 - Preserving one local transaction requires an explicit in-process transaction/effect port; separating ownership does not require a network service.
 - Core conformance tests need a deliberately neutral fixture rather than a product module presented as kernel behavior.
-- Existing code and documentation that label pallet semantics as Core carry migration work until the boundary is made executable.
+- Existing code and documentation that label pallet semantics as Core must be corrected rather than
+  used as precedent.
 
 ## Alternatives considered
 

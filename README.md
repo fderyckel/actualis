@@ -1,8 +1,8 @@
-# Actualis Core
+# Actualis v0
 
-Actualis Core is a production-oriented constitutional-kernel proof built as an Elixir/Phoenix modular monolith backed by PostgreSQL.
+Actualis v0 is a production-oriented constitutional-kernel proof built as an Elixir/Phoenix modular monolith backed by PostgreSQL. The umbrella contains a domain-neutral Core, a separately owned manufacturing reference application, and a web adapter.
 
-The implemented vertical slice proves that one pallet movement can be:
+The manufacturing reference application consumes Core through a generic capability handler port. The applications are co-deployed and share one database transaction; this is a module boundary, not a microservice boundary. The implemented vertical slice proves that one pallet movement can be:
 
 - requested by a resolved human and device identity;
 - authorized by active principal, device trust, site assignment, purpose, grant, and policy version;
@@ -76,7 +76,7 @@ Docker Engine is optional host preparation, not an Actualis installer. The repos
 contain a Dockerfile, Compose manifest, or published application image; see the [deployment status
 and production gaps](docs/technical/deployment/README.md).
 
-See the [pallet-movement application-module decision](architecture/adr/0006-pallet-movement-application-module.md), the [threat model](architecture/threat-models/pallet-move.md), and the [technical reference](docs/technical/core-kernel.md).
+See the [pallet-movement application-module decision](architecture/adr/0006-pallet-movement-application-module.md), the [threat model](architecture/threat-models/pallet-move.md), the [Core technical reference](docs/technical/core-kernel/README.md), and the [manufacturing reference](docs/technical/manufacturing-reference/README.md).
 
 ## Engineering standards
 

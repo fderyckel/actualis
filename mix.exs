@@ -45,8 +45,14 @@ defmodule Actualis.Umbrella.MixProject do
   # and cannot be accessed from applications inside the apps/ folder.
   defp aliases do
     [
-      # run `mix setup` in all child apps
-      setup: ["cmd mix setup"],
+      setup: ["deps.get", "ecto.create", "actualis.migrate", "actualis.seed"],
+      "actualis.migrate": [
+        "do --app actualis_core " <>
+          "cmd env MIX_ENV=#{Mix.env()} mix ecto.migrate --migrations-path priv/repo/migrations + " <>
+          "cmd env MIX_ENV=#{Mix.env()} mix ecto.migrate --migrations-path ../actualis_manufacturing/priv/repo/migrations"
+      ],
+      "actualis.seed": ["run apps/actualis_manufacturing/priv/repo/seeds.exs"],
+      test: ["ecto.create --quiet", "actualis.migrate", "test"],
       precommit: ["quality"],
       quality: [
         "format --check-formatted",

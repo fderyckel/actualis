@@ -23,36 +23,14 @@ defmodule Actualis.Authority.Principal do
   end
 end
 
-defmodule Actualis.Manufacturing.Site do
-  @moduledoc false
-  use Actualis.Model
-
-  schema "manufacturing_sites" do
-    field :code, :string
-    field :name, :string
-    timestamps()
-  end
-end
-
-defmodule Actualis.Manufacturing.Location do
-  @moduledoc false
-  use Actualis.Model
-
-  schema "manufacturing_locations" do
-    field :site_id, :binary_id
-    field :code, :string
-    field :active, :boolean, default: true
-    timestamps()
-  end
-end
-
 defmodule Actualis.Authority.Device do
   @moduledoc false
   use Actualis.Model
 
   schema "authority_devices" do
     field :principal_id, :binary_id
-    field :site_id, :binary_id
+    field :scope_id, :binary_id
+    field :legacy_site_id, :binary_id, source: :site_id
     field :status, :string, default: "trusted"
     field :trust_expires_at, :utc_datetime_usec
     timestamps()
@@ -65,7 +43,8 @@ defmodule Actualis.Authority.Assignment do
 
   schema "authority_assignments" do
     field :principal_id, :binary_id
-    field :site_id, :binary_id
+    field :scope_id, :binary_id
+    field :legacy_site_id, :binary_id, source: :site_id
     field :valid_from, :utc_datetime_usec
     field :expires_at, :utc_datetime_usec
     timestamps()
@@ -101,21 +80,6 @@ defmodule Actualis.Authority.Grant do
   end
 end
 
-defmodule Actualis.Manufacturing.Pallet do
-  @moduledoc false
-  use Actualis.Model
-
-  schema "manufacturing_pallets" do
-    field :site_id, :binary_id
-    field :current_location_id, :binary_id
-    field :label, :string
-    field :material_code, :string
-    field :quality_status, :string, default: "released"
-    field :version, :integer, default: 1
-    timestamps()
-  end
-end
-
 defmodule Actualis.Execution.Receipt do
   @moduledoc false
   use Actualis.Model
@@ -129,23 +93,6 @@ defmodule Actualis.Execution.Receipt do
     field :outcome, :string
     field :response, :map
     timestamps()
-  end
-end
-
-defmodule Actualis.Manufacturing.Movement do
-  @moduledoc false
-  use Actualis.Model
-
-  schema "manufacturing_movements" do
-    field :pallet_id, :binary_id
-    field :source_location_id, :binary_id
-    field :destination_location_id, :binary_id
-    field :receipt_id, :binary_id
-    field :performed_by_id, :binary_id
-    field :reason, :string
-    field :pallet_version, :integer
-    field :occurred_at, :utc_datetime_usec
-    timestamps(updated_at: false)
   end
 end
 
@@ -182,22 +129,6 @@ defmodule Actualis.Execution.Event do
     field :payload, :map
     field :occurred_at, :utc_datetime_usec
     field :published_at, :utc_datetime_usec
-    timestamps(updated_at: false)
-  end
-end
-
-defmodule Actualis.Projection.Delta do
-  @moduledoc false
-  use Ecto.Schema
-  @primary_key {:cursor, :id, autogenerate: true}
-  @timestamps_opts [type: :utc_datetime_usec]
-  schema "projection_deltas" do
-    field :event_id, :binary_id
-    field :projection, :string
-    field :scope_id, :binary_id
-    field :payload, :map
-    field :expires_at, :utc_datetime_usec
-    field :revoked_at, :utc_datetime_usec
     timestamps(updated_at: false)
   end
 end

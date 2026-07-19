@@ -1,6 +1,8 @@
 defmodule ActualisWeb.ActualisController do
   use ActualisWeb, :controller
-  alias Actualis.{CapabilityRuntime, Evidence, Projection, Repo}
+
+  alias Actualis.{Evidence, Repo}
+  alias ActualisManufacturing
 
   def health(conn, _), do: health_response(conn, Ecto.Adapters.SQL.query(Repo, "SELECT 1", []))
   def openapi(conn, _), do: json(conn, ActualisWeb.OpenAPI.spec())
@@ -17,7 +19,7 @@ defmodule ActualisWeb.ActualisController do
         "remote_ip" => conn.remote_ip |> :inet.ntoa() |> to_string()
       })
 
-    case CapabilityRuntime.execute(attrs) do
+    case ActualisManufacturing.execute(attrs) do
       {:ok, %{"ok" => true} = result} ->
         json(conn, result)
 
@@ -30,7 +32,10 @@ defmodule ActualisWeb.ActualisController do
   end
 
   def snapshot(conn, %{"view" => view, "site_id" => site, "purpose" => purpose}) do
-    render_result(conn, Projection.snapshot(conn.assigns.identity, site, purpose, view))
+    render_result(
+      conn,
+      ActualisManufacturing.snapshot(conn.assigns.identity, site, purpose, view)
+    )
   end
 
   def snapshot(conn, _), do: invalid(conn)
@@ -43,7 +48,10 @@ defmodule ActualisWeb.ActualisController do
       }) do
     case Integer.parse(after_value) do
       {cursor, ""} when cursor >= 0 ->
-        render_result(conn, Projection.deltas(conn.assigns.identity, site, purpose, view, cursor))
+        render_result(
+          conn,
+          ActualisManufacturing.deltas(conn.assigns.identity, site, purpose, view, cursor)
+        )
 
       _ ->
         invalid(conn)
