@@ -1,9 +1,9 @@
-defmodule ActualisManufacturing.MixProject do
+defmodule ActualisStock.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :actualis_manufacturing,
+      app: :actualis_stock,
       version: "0.1.0",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
@@ -22,13 +22,12 @@ defmodule ActualisManufacturing.MixProject do
   end
 
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
+  defp elixirc_paths(_environment), do: ["lib"]
 
   defp deps do
     [
       {:actualis_core, in_umbrella: true},
-      {:ecto_sql, "~> 3.13"},
-      {:jason, "~> 1.2", only: :test}
+      {:ecto, "~> 3.13"}
     ]
   end
 

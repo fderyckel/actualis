@@ -1,7 +1,7 @@
 defmodule Actualis.CapabilityRuntimeTest do
   use Actualis.DataCase, async: false
 
-  alias Actualis.{CapabilityRuntime, ConformanceFixture, Repo}
+  alias Actualis.{CapabilityRuntime, ConformanceFixture, Evidence, Repo}
   alias Actualis.Evidence.Record
   alias Actualis.Execution.{Event, Receipt}
 
@@ -64,7 +64,7 @@ defmodule Actualis.CapabilityRuntimeTest do
   end
 
   test "Core source does not import manufacturing modules" do
-    core_source_root = Path.expand("../../../lib", __DIR__)
+    core_source_root = Path.expand("../../lib", __DIR__)
 
     sources =
       core_source_root
@@ -90,5 +90,38 @@ defmodule Actualis.CapabilityRuntimeTest do
     """
 
     assert %{rows: []} = Ecto.Adapters.SQL.query!(Repo, query)
+  end
+
+  test "reconstructs evidence through a generic authorization scope" do
+    fixture = ConformanceFixture.create()
+
+    assert {:ok, %{"evidence_id" => evidence_id}} =
+             CapabilityRuntime.execute(ConformanceFixture.command(fixture))
+
+    assert {:ok, %{"evidence" => evidence}} =
+             Evidence.fetch(
+               %{principal_id: fixture.operator.id, device_id: fixture.device.id},
+               evidence_id,
+               fixture.scope_id,
+               "inspect_conformance_evidence"
+             )
+
+    assert evidence["scope"] == %{"scope_id" => fixture.scope_id}
+  end
+
+  test "Core execution source does not interpret product scope vocabulary" do
+    core_source_root = Path.expand("../../lib/actualis", __DIR__)
+
+    execution_sources =
+      [
+        Path.join(core_source_root, "authority.ex"),
+        Path.join(core_source_root, "evidence.ex"),
+        Path.join(core_source_root, "delivery.ex")
+      ] ++ Path.wildcard(Path.join(core_source_root, "capability/*.ex"))
+
+    source = Enum.map_join(execution_sources, "\n", &File.read!/1)
+
+    refute source =~ "site_id"
+    refute source =~ "pallet"
   end
 end

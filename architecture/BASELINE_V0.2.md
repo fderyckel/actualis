@@ -126,6 +126,12 @@ to obtain a named operational owner, validate normal and failure narratives, rec
 rights, and measure the baseline. Unvalidated narrative hypotheses do not authorize platform
 abstractions.
 
+Status on 2026-07-19: the [Phase 0 evidence package](phase-0/README.md) now contains a validation
+register for 24 manufacturing hypotheses, a workload envelope, a synthetic dataset, prototype
+briefs, boundary threat coverage, and a command-path benchmark harness. No operational owner,
+field observation, usability result, or production-shaped capacity result has been recorded, so
+Gate 0 remains open.
+
 ### Gate 1: make the boundary executable
 
 Separate manufacturing ownership from Core, add a neutral conformance fixture, and enforce

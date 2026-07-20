@@ -51,6 +51,16 @@ defmodule Actualis.ConformanceFixture do
       obligations: ["record_evidence"]
     })
 
+    insert(%Grant{
+      principal_id: operator.id,
+      policy_id: policy.id,
+      capability: "evidence.read",
+      scope_id: scope_id,
+      purpose: "inspect_conformance_evidence",
+      permitted_fields: ["*"],
+      obligations: ["record_access"]
+    })
+
     %{
       operator: operator,
       device: device,

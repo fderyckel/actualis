@@ -3,6 +3,27 @@ scope: actualis_v0
 last_reviewed: 2026-07-19
 
 areas:
+  phase_0_reality_contracts:
+    implementation_status: partial
+    source_paths:
+      - architecture/phase-0
+      - architecture/reality-contracts/manufacturing-exception-replan-v0.1.md
+      - architecture/threat-models/phase-0-boundaries.md
+      - architecture/threat-models/pallet-move.md
+      - evals/phase0
+      - apps/actualis_manufacturing/test/actualis_manufacturing/phase0_fixture_test.exs
+    technical_docs:
+      - architecture/phase-0/README.md
+      - architecture/phase-0/benchmark-plan.md
+      - architecture/phase-0/surface-prototype-briefs.md
+      - architecture/threat-models/phase-0-boundaries.md
+      - docs/technical/manufacturing-reference/README.md
+    user_docs: []
+    user_impact: none
+    user_impact_reason: Phase 0 adds discovery, threat, prototype-brief, dataset, and benchmark artifacts but no operable product surface.
+    screenshot_status: not_applicable
+    screenshot_reason: Visual prototypes have not been selected or built; fabricated screenshots would overstate Phase 0 evidence.
+
   runtime_scaffold:
     implementation_status: partial
     source_paths:
@@ -30,6 +51,7 @@ areas:
       - apps/actualis_core/priv/repo/migrations/20260718090000_create_kernel.exs
       - apps/actualis_core/priv/repo/migrations/20260719090000_expand_authority_scope.exs
       - apps/actualis_core/priv/repo/migrations/20260719100000_detach_authority_scope_from_manufacturing.exs
+      - apps/actualis_core/priv/repo/migrations/20260719110000_add_evidence_authorization_scope.exs
     technical_docs:
       - docs/technical/core-kernel/README.md
     user_docs:
@@ -89,12 +111,27 @@ areas:
     screenshot_status: not_applicable
     screenshot_reason: No manufacturing UI exists in this workspace snapshot.
 
+  stock_foundation:
+    implementation_status: partial
+    source_paths:
+      - apps/actualis_stock
+      - apps/actualis_stock/architecture/adr/0001-stock-domain-package-foundation.md
+    technical_docs:
+      - docs/technical/stock/README.md
+    user_docs:
+      - docs/user/stock/README.md
+    user_impact: concepts_only
+    user_impact_reason: The Stock application boundary and capability vocabulary exist, but there is no persisted Stock operation or human-facing interface.
+    screenshot_status: not_applicable
+    screenshot_reason: Phase 0 has no operable Stock surface, so a screenshot would be fabricated rather than evidence.
+
   execution_evidence_and_projection:
     implementation_status: partial
     source_paths:
       - apps/actualis_core/lib/actualis/evidence.ex
       - apps/actualis_core/lib/actualis/delivery.ex
       - apps/actualis_core/lib/actualis/models.ex
+      - apps/actualis_core/priv/repo/migrations/20260719110000_add_evidence_authorization_scope.exs
       - apps/actualis_manufacturing/lib/actualis_manufacturing/projection.ex
       - apps/actualis_manufacturing/lib/actualis_manufacturing/projection/delta.ex
     technical_docs:

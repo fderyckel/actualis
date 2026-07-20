@@ -1,0 +1,35 @@
+{
+  "metadata": {
+    "schema_version": "1.0",
+    "classification": "synthetic_non_personal",
+    "contains_real_personal_data": false,
+    "contains_secrets": false,
+    "deterministic_seed": 260719,
+    "purpose": "phase_0_contract_and_harness_validation"
+  },
+  "sites": [
+    {"id": "10000000-0000-4000-8000-000000000001", "code": "SYN-PLANT-A", "name": "Synthetic Plant A"}
+  ],
+  "locations": [
+    {"id": "20000000-0000-4000-8000-000000000001", "site_id": "10000000-0000-4000-8000-000000000001", "code": "RECEIVING", "kind": "receiving"},
+    {"id": "20000000-0000-4000-8000-000000000002", "site_id": "10000000-0000-4000-8000-000000000001", "code": "LINE-01", "kind": "production"},
+    {"id": "20000000-0000-4000-8000-000000000003", "site_id": "10000000-0000-4000-8000-000000000001", "code": "QUARANTINE", "kind": "quarantine"}
+  ],
+  "principals": [
+    {"id": "30000000-0000-4000-8000-000000000001", "kind": "human", "display_name": "Synthetic Operator 01"},
+    {"id": "30000000-0000-4000-8000-000000000002", "kind": "human", "display_name": "Synthetic Planner 01"},
+    {"id": "30000000-0000-4000-8000-000000000003", "kind": "device", "display_name": "Synthetic Scanner 01"}
+  ],
+  "pallets": [
+    {"id": "40000000-0000-4000-8000-000000000001", "label": "SYN-PALLET-001", "location_id": "20000000-0000-4000-8000-000000000001", "quality_status": "released", "version": 1},
+    {"id": "40000000-0000-4000-8000-000000000002", "label": "SYN-PALLET-002", "location_id": "20000000-0000-4000-8000-000000000001", "quality_status": "hold", "version": 4},
+    {"id": "40000000-0000-4000-8000-000000000003", "label": "SYN-PALLET-003", "location_id": "20000000-0000-4000-8000-000000000002", "quality_status": "released", "version": 8}
+  ],
+  "observation_trace": [
+    {"sequence": 100, "kind": "location_claim", "pallet_id": "40000000-0000-4000-8000-000000000001", "location_id": "20000000-0000-4000-8000-000000000001", "delivery": "initial"},
+    {"sequence": 100, "kind": "location_claim", "pallet_id": "40000000-0000-4000-8000-000000000001", "location_id": "20000000-0000-4000-8000-000000000001", "delivery": "duplicate_after_reconnect"},
+    {"sequence": 102, "kind": "location_claim", "pallet_id": "40000000-0000-4000-8000-000000000003", "location_id": "20000000-0000-4000-8000-000000000002", "delivery": "out_of_order_first"},
+    {"sequence": 101, "kind": "location_claim", "pallet_id": "40000000-0000-4000-8000-000000000003", "location_id": "20000000-0000-4000-8000-000000000001", "delivery": "out_of_order_late"}
+  ],
+  "scenario_ids": ["M-01", "M-02", "M-04", "M-05", "M-06", "M-07", "M-08", "M-09", "M-10", "M-11", "M-12"]
+}

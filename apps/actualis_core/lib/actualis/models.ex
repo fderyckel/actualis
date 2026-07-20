@@ -106,6 +106,7 @@ defmodule Actualis.Evidence.Record do
     field :device_id, :binary_id
     field :purpose, :string
     field :capability, :string
+    field :authorization_scope_id, :binary_id
     field :scope, :map
     field :input, :map
     field :decision, :string

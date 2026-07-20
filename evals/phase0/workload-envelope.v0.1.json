@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "status": "engineering_hypothesis_unvalidated",
+  "unit_of_isolation": "single_cell",
+  "dataset": "evals/phase0/fixtures/manufacturing-synthetic.v0.1.json",
+  "dimensions": {
+    "authoritative_database_bytes": "bytes",
+    "authoritative_rows_by_table": "rows",
+    "connected_clients": "connections",
+    "active_operators": "principals",
+    "trusted_devices": "devices",
+    "governed_commands": "commands_per_second",
+    "projection_fanout": "deltas_per_second",
+    "outbox_backlog": "events",
+    "observation_ingest": "observations_per_second",
+    "offline_duration": "seconds",
+    "buffered_observations": "observations_per_device",
+    "duplicate_ratio": "fraction",
+    "out_of_order_ratio": "fraction"
+  },
+  "targets": {
+    "ordinary_command_p95_ms": 250,
+    "ordinary_command_p99_ms": 750,
+    "authoritative_delta_p95_ms": 1000,
+    "duplicate_authoritative_effects": 0,
+    "trace_completeness_fraction": 1.0,
+    "recovery_point_seconds": 300,
+    "recovery_time_seconds": 3600
+  },
+  "phase_0_probe_limits": {
+    "postgresql_layout_bytes": 1099511627776,
+    "phoenix_connections": 10000,
+    "note": "Probe limits from the architecture vision are hypotheses, not accepted production capacity."
+  },
+  "profiles": [
+    {
+      "id": "nominal_shift",
+      "status": "needs_site_measurement",
+      "command_mix": {"move": 0.7, "read": 0.25, "audit": 0.05},
+      "duplicate_ratio": 0.001,
+      "out_of_order_ratio": 0.0
+    },
+    {
+      "id": "shift_change_peak",
+      "status": "needs_site_measurement",
+      "command_mix": {"move": 0.55, "read": 0.4, "audit": 0.05},
+      "duplicate_ratio": 0.005,
+      "out_of_order_ratio": 0.0
+    },
+    {
+      "id": "offline_reconnect_storm",
+      "status": "adapter_not_implemented",
+      "command_mix": {"observation_replay": 0.8, "read": 0.15, "move": 0.05},
+      "duplicate_ratio": 0.1,
+      "out_of_order_ratio": 0.05
+    },
+    {
+      "id": "delivery_pool_saturation",
+      "status": "worker_not_implemented",
+      "command_mix": {"move": 0.25, "read": 0.25, "delivery": 0.5},
+      "duplicate_ratio": 0.02,
+      "out_of_order_ratio": 0.0
+    }
+  ]
+}

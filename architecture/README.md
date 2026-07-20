@@ -2,7 +2,8 @@
 
 The implementation adopts the Actualis Stack Architecture Vision v0.1 boundaries as its starting
 hypothesis. The repository prioritizes Actualis Core and also hosts a separately owned
-manufacturing reference application that proves the Core seam.
+manufacturing reference application that proves the Core seam plus a Phase 0 Stock domain
+application that currently defines contracts only.
 
 ## Current programme baseline
 
@@ -12,6 +13,8 @@ manufacturing reference application that proves the Core seam.
 - [Manufacturing exception and replan reality contract
   v0.1](reality-contracts/manufacturing-exception-replan-v0.1.md) defines the selected first
   cross-component proof journey and the evidence required before it is considered validated.
+- [Phase 0 reality-contract evidence gate](phase-0/README.md) records prepared artifacts, external
+  blockers, and the evidence still required before Phase 1 claims are accepted.
 
 ## Core versus adjacent components
 
@@ -29,16 +32,19 @@ manufacturing reference application that proves the Core seam.
 The current umbrella dependency direction is:
 
 ```text
-actualis_core  <-  actualis_manufacturing
-       ^                    ^
-       +------ actualis_web-+
+actualis_stock  ------>  actualis_core  <-----  actualis_manufacturing
+                              ^                         ^
+                              +-------- actualis_web ---+
 ```
 
-- `actualis_core` has no compile-time dependency on manufacturing and does not interpret product
-  payloads or query product tables.
+- `actualis_core` has no compile-time dependency on Stock or manufacturing and does not interpret
+  product payloads or query product tables.
 - `actualis_manufacturing` implements the Core capability-handler contract and owns pallet
   schemas, invariants, events, projections, seeds, tests, and future migrations.
-- `actualis_web` is an adapter over both public contexts.
+- `actualis_stock` currently owns its organisation scope, capability vocabulary, and future module
+  boundary; it registers no handler and owns no table in Phase 0.
+- `actualis_web` is currently an adapter over Core and manufacturing; it has no Stock dependency
+  or route in Phase 0.
 
 The applications are modules in one deployable umbrella, not separate services. Core opens the
 repository transaction and calls the product handler in-process so domain effects, receipt,
@@ -91,3 +97,7 @@ No TypeScript UI, Rust edge agent, solver, telemetry store, or provider adapter 
 - [ADR 0005](adr/0005-deterministic-replay-and-simulation-contract.md)
 - [ADR 0006](adr/0006-pallet-movement-application-module.md)
 - [ADR 0007](adr/0007-manufacturing-exception-replan-lead-proof-journey.md)
+
+### Domain package decisions
+
+- [Stock ADR 0001](../apps/actualis_stock/architecture/adr/0001-stock-domain-package-foundation.md)

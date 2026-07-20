@@ -1,5 +1,9 @@
 # Pallet-move threat model
 
+Repository-wide trust boundaries and the Phase 0 models for cells, support, device enrollment,
+sync, AI tools, and integrations are documented in the
+[Phase 0 boundary threat model](phase-0-boundaries.md).
+
 This model covers the implemented logical inventory transition in the separately owned,
 co-deployed manufacturing application recorded in
 [ADR 0006](../adr/0006-pallet-movement-application-module.md). It does not claim that Core

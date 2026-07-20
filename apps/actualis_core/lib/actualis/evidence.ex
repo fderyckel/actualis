@@ -6,28 +6,28 @@ defmodule Actualis.Evidence do
   alias Actualis.Execution.Receipt
   alias Actualis.Repo
 
-  def fetch(identity, evidence_id, site_id, purpose) do
+  def fetch(identity, evidence_id, authorization_scope_id, purpose) do
     decision =
       Authority.evaluate(%{
         principal_id: identity.principal_id,
         device_id: identity.device_id,
         capability: "evidence.read",
         purpose: purpose,
-        authorization_scope_id: site_id,
-        scope: %{"site_id" => site_id}
+        authorization_scope_id: authorization_scope_id,
+        scope: %{"scope_id" => authorization_scope_id}
       })
 
     if Authority.allowed?(decision),
-      do: fetch_allowed(evidence_id, site_id, decision),
+      do: fetch_allowed(evidence_id, authorization_scope_id, decision),
       else: {:error, error("authorization_denied", "Evidence access is denied", decision)}
   end
 
-  defp fetch_allowed(id, site_id, decision) do
+  defp fetch_allowed(id, authorization_scope_id, decision) do
     query =
       from e in Record,
         join: r in Receipt,
         on: r.id == e.receipt_id,
-        where: e.id == ^id and fragment("?->>'site_id' = ?", e.scope, ^site_id),
+        where: e.id == ^id and e.authorization_scope_id == ^authorization_scope_id,
         select: {e, r}
 
     case Repo.one(query) do

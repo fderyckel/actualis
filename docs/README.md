@@ -11,6 +11,17 @@ The first product consumer has its own [manufacturing reference](technical/manuf
 It documents product schemas, invariants, projections, and the Core integration seam without
 presenting those concepts as kernel behavior.
 
+The planned [Stock domain package](technical/stock/README.md) has a Phase 0 application boundary,
+scope contract, and capability vocabulary. No Stock operation or user interface is available.
+
+The proposed [Participation Phase 0 architecture](../architecture/participation/README.md) defines
+product boundaries, real-input gates, and privacy/security constraints. No Participation application
+code or operating surface exists.
+
+Architecture discovery and benchmark readiness are tracked separately in the
+[Phase 0 reality-contract evidence gate](../architecture/phase-0/README.md). Its prepared artifacts
+are not user procedures or claims that field validation has occurred.
+
 The tracks are not copies. A technical page documents contracts, invariants, authorization, persistence, and failure behavior. A user page documents goals, prerequisites, visible steps, outcomes, and recovery. They link to each other through the [documentation map](doc-map.yaml).
 
 ## Working agreement

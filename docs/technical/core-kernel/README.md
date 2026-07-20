@@ -68,7 +68,8 @@ capability identifier. The web application depends on both applications because 
 current product-shaped route.
 
 Core source tests reject imports of `ActualisManufacturing` or the former
-`Actualis.Manufacturing` namespace.
+`Actualis.Manufacturing` namespace. They also reject product scope vocabulary in the Core execution,
+authority, evidence, and delivery sources.
 
 ## Governed command flow
 
@@ -142,8 +143,10 @@ Obligations are returned but not yet executed or verified.
 ## Evidence, receipts, and delivery
 
 Core persists one evidence record for every fresh governed denial, domain rejection, or success.
-The record links principal, device, purpose, capability, canonical scope and input, authority
-decision, policy version, domain versions, and effects.
+The record links principal, device, purpose, capability, generic `authorization_scope_id`, canonical
+product scope and input, authority decision, policy version, domain versions, and effects. Evidence
+reads reauthorize against and query the generic authorization scope; Core no longer interprets
+`site_id` inside the product scope map.
 
 `Actualis.Delivery.append_event!/1` is the stable transactional event-envelope port. Product
 handlers own event names and payloads; Core validates and stores event type, aggregate identifier
@@ -164,8 +167,9 @@ The Core suite verifies:
 - changed-payload idempotency conflicts;
 - retained evidence for authority denial;
 - rollback of receipt, evidence, and event; and
-- absence of manufacturing imports in Core source and manufacturing foreign keys from Core
-  authority tables.
+- absence of manufacturing imports and product scope vocabulary in Core execution source;
+- absence of manufacturing foreign keys from Core authority tables; and
+- generic-scope evidence reconstruction without manufacturing fields.
 
 The fixture is not a product model and must not become a generic entity API.
 
@@ -205,11 +209,12 @@ schema changes belong only to the manufacturing path.
 | Event append port | [`delivery.ex`](../../../apps/actualis_core/lib/actualis/delivery.ex) |
 | Scope expansion | [`20260719090000_expand_authority_scope.exs`](../../../apps/actualis_core/priv/repo/migrations/20260719090000_expand_authority_scope.exs) |
 | Database dependency removal | [`20260719100000_detach_authority_scope_from_manufacturing.exs`](../../../apps/actualis_core/priv/repo/migrations/20260719100000_detach_authority_scope_from_manufacturing.exs) |
+| Generic evidence scope | [`20260719110000_add_evidence_authorization_scope.exs`](../../../apps/actualis_core/priv/repo/migrations/20260719110000_add_evidence_authorization_scope.exs) |
 | Neutral conformance tests | [`capability_runtime_test.exs`](../../../apps/actualis_core/test/actualis/capability_runtime_test.exs) |
 | Manufacturing consumer | [Manufacturing reference](../manufacturing-reference/README.md) |
 
-Verification on 2026-07-19: `mix test` passed 7 Core tests, 9 manufacturing tests, and 5 web
-tests (21 total). Re-run the root quality gate after any mapped source or migration changes.
+Verification on 2026-07-19: 9 Core tests, 12 manufacturing tests, 6 Stock tests, and 5 web tests
+passed (32 total). Re-run the root quality gate after any mapped source or migration changes.
 
 ## Documentation maintenance
 

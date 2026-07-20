@@ -206,6 +206,7 @@ defmodule Actualis.CapabilityRuntime do
       device_id: command.device_id,
       purpose: command.purpose,
       capability: command.capability,
+      authorization_scope_id: command.authorization_scope_id,
       scope: command.scope,
       input: command.input,
       decision: decision["decision"],

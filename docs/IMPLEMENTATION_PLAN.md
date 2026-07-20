@@ -23,6 +23,22 @@ Core is the stable runtime for:
 
 Core does not own concrete operational entities or invariants. A teacher, learner, pallet, machine, work order, course, room, catalog item, or payment is always domain-owned.
 
+## Phase 0 reality-contract gate
+
+Part 20 of the architecture vision defines Phase 0 as operational discovery and measurable evidence,
+not a Core coding phase. The current [Phase 0 package](../architecture/phase-0/README.md) prepares:
+
+- a validation register for the 24 manufacturing narrative hypotheses;
+- a measurable workload envelope and synthetic, non-personal fixture;
+- outcome briefs and evaluation protocols for one manufacturing and two education surfaces;
+- repository boundary threat coverage; and
+- a repeatable smoke harness for the existing Core/PostgreSQL command path.
+
+Phase 0 remains open until named stakeholders validate the narratives, visual directions become
+tested prototypes, and representative benchmark adapters produce production-shaped results. The
+absence of SQLite/OPFS, ClickHouse, realtime fan-out, or production identity is recorded as
+`not implemented`, not hidden behind mock benchmark claims.
+
 ## Core v0 scope
 
 ### Checkpoint — 2026-07-19

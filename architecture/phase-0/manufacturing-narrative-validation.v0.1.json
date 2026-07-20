@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "canonical_narrative_source": "architecture/reality-contracts/manufacturing-exception-replan-v0.1.md#initial-narrative-catalogue",
+  "operational_owner": null,
+  "review_status": "not_started",
+  "allowed_decisions": ["accepted", "rejected", "revised", "not_applicable"],
+  "narratives": [
+    {"id": "M-01", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-02", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-03", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-04", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-05", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-06", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-07", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-08", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-09", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-10", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-11", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-12", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-13", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-14", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-15", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-16", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-17", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-18", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-19", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-20", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-21", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-22", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-23", "decision": null, "owner": null, "evidence_refs": [], "notes": null},
+    {"id": "M-24", "decision": null, "owner": null, "evidence_refs": [], "notes": null}
+  ]
+}

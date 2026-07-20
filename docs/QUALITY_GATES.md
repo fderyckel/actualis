@@ -81,6 +81,19 @@ Initial hypotheses from the architecture vision:
 
 Test inputs must include realistic relationship and policy evaluation, not only a health endpoint.
 
+## Phase 0 evidence integrity
+
+- Operational narratives remain `unvalidated` until a named role accepts, rejects, or revises them
+  with an evidence reference.
+- Evaluation datasets declare their synthetic classification, deterministic seed, intended use, and
+  absence of personal data and secrets; executable checks enforce the declaration.
+- Every retained benchmark result records artifact revision, environment, topology, dataset,
+  workload units, concurrency, duration, failures, percentiles, and limitations.
+- A smoke result cannot satisfy a production-shaped benchmark gate, and an absent adapter is
+  reported as `not implemented` rather than simulated into a technology decision.
+- Surface briefs do not satisfy the prototype gate; selected visual versions, representative user
+  sessions, findings, and resulting contract changes are required.
+
 ## Security and supply chain
 
 - Dependency, secret, and static analysis checks run in CI.

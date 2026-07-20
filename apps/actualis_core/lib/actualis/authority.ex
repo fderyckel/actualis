@@ -15,7 +15,7 @@ defmodule Actualis.Authority do
         "permitted_fields" => grant.permitted_fields,
         "obligations" => grant.obligations,
         "policy_version" => policy.version,
-        "explanation_code" => "assigned_operator_with_active_grant"
+        "explanation_code" => "assigned_principal_with_active_grant"
       }
     else
       {:error, code} -> denied(code)
@@ -42,7 +42,7 @@ defmodule Actualis.Authority do
             p.kind == "device" and p.status == "active" and
             (is_nil(d.trust_expires_at) or d.trust_expires_at > ^now)
 
-    if Repo.exists?(query), do: :ok, else: {:error, "device_not_trusted_for_site"}
+    if Repo.exists?(query), do: :ok, else: {:error, "device_not_trusted_for_scope"}
   end
 
   defp assignment(principal_id, scope_id, now) do
@@ -53,7 +53,7 @@ defmodule Actualis.Authority do
             a.valid_from <= ^now and
             (is_nil(a.expires_at) or a.expires_at > ^now)
 
-    if Repo.exists?(query), do: :ok, else: {:error, "operator_not_assigned_to_site"}
+    if Repo.exists?(query), do: :ok, else: {:error, "principal_not_assigned_to_scope"}
   end
 
   defp grant(command, now) do

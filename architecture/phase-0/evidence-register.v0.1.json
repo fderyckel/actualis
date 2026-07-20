@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "phase": "phase_0_reality_contracts",
+  "status": "in_progress_not_validated",
+  "reviewed_at": "2026-07-19",
+  "requirements": [
+    {
+      "id": "P0-01",
+      "requirement": "shadow_stakeholders",
+      "status": "blocked_external",
+      "owner": null,
+      "evidence": [],
+      "missing": [
+        "named_operational_owner",
+        "observation_dates_and_sites",
+        "role_interview_records",
+        "accepted_or_rejected_narratives"
+      ]
+    },
+    {
+      "id": "P0-02",
+      "requirement": "operational_narratives",
+      "status": "drafted_unvalidated",
+      "owner": "manufacturing_product_leadership_unassigned",
+      "evidence": [
+        "architecture/reality-contracts/manufacturing-exception-replan-v0.1.md",
+        "architecture/phase-0/manufacturing-narrative-validation.v0.1.json"
+      ],
+      "missing": ["operational_owner_decisions", "education_narrative_contract"]
+    },
+    {
+      "id": "P0-03",
+      "requirement": "load_envelope_and_safe_dataset",
+      "status": "prepared_hypothesis",
+      "owner": "platform_engineering_unassigned",
+      "evidence": [
+        "evals/phase0/workload-envelope.v0.1.json",
+        "evals/phase0/fixtures/manufacturing-synthetic.v0.1.json"
+      ],
+      "missing": ["site_baseline_measurements", "production_shaped_scale_run"]
+    },
+    {
+      "id": "P0-04",
+      "requirement": "surface_prototypes",
+      "status": "briefed_not_built",
+      "owner": "product_design_unassigned",
+      "evidence": ["architecture/phase-0/surface-prototype-briefs.md"],
+      "missing": [
+        "selected_visual_directions",
+        "three_interactive_prototypes",
+        "usability_sessions",
+        "recorded_findings"
+      ]
+    },
+    {
+      "id": "P0-05",
+      "requirement": "threat_models",
+      "status": "drafted_review_required",
+      "owner": "security_owner_unassigned",
+      "evidence": [
+        "architecture/threat-models/pallet-move.md",
+        "architecture/threat-models/phase-0-boundaries.md"
+      ],
+      "missing": ["security_owner_review", "risk_acceptance_owners", "executable_abuse_tests"]
+    },
+    {
+      "id": "P0-06",
+      "requirement": "technology_benchmarks",
+      "status": "partial_harness_only",
+      "owner": "platform_engineering_unassigned",
+      "evidence": [
+        "architecture/phase-0/benchmark-plan.md",
+        "evals/phase0/benchmark.exs"
+      ],
+      "missing": [
+        "one_tb_postgresql_layout_run",
+        "ten_thousand_connection_and_fanout_run",
+        "sqlite_opfs_sync_adapter_and_run",
+        "clickhouse_telemetry_adapter_and_run"
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Actualis v0
 
-Actualis v0 is a production-oriented constitutional-kernel proof built as an Elixir/Phoenix modular monolith backed by PostgreSQL. The umbrella contains a domain-neutral Core, a separately owned manufacturing reference application, and a web adapter.
+Actualis v0 is a production-oriented constitutional-kernel proof built as an Elixir/Phoenix modular monolith backed by PostgreSQL. The umbrella contains a domain-neutral Core, a separately owned manufacturing reference application, a Phase 0 Stock domain application, and a web adapter.
 
 The manufacturing reference application consumes Core through a generic capability handler port. The applications are co-deployed and share one database transaction; this is a module boundary, not a microservice boundary. The implemented vertical slice proves that one pallet movement can be:
 
@@ -10,11 +10,19 @@ The manufacturing reference application consumes Core through a generic capabili
 - committed with the pallet movement, evidence, outbox event, and two filtered projection deltas in one transaction;
 - replayed safely or reconstructed from retained evidence.
 
+The [Stock domain application](docs/technical/stock/README.md) currently defines only its package
+boundary, organisation scope, capability vocabulary, and telemetry names. It has no registered
+handler, persistence, route, or user interface.
+
 ## Architecture challenge and scope
 
 The proposal is directionally sound, but its 9–12 month roadmap is not one implementation unit. This repository deliberately implements the Stage 1 exit condition and a thin synchronization proof. It does not pretend that development headers are authentication or that an outbox row is delivered integration.
 
 The command body cannot choose its principal, device, or capability. The local HTTP adapter injects identity from headers, and authority data determines device trust. Production must replace those headers with verified OIDC and authenticated device credentials.
+
+The [Phase 0 evidence gate](architecture/phase-0/README.md) tracks operational narratives,
+workload hypotheses, safe datasets, surface-prototype briefs, threat models, and benchmark evidence.
+It is explicitly in progress and must not be treated as validated field research.
 
 ## Local setup
 

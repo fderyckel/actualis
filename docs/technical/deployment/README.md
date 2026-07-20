@@ -112,9 +112,9 @@ bin/mix-local quality
 MIX_ENV=prod bin/mix-local compile --warnings-as-errors
 ```
 
-In the reference checkout, setup completed and the umbrella suite passed 7 Core tests, 9
-manufacturing tests, and 5 web tests. This verifies the repository baseline, not the Debian/Ubuntu
-procedure itself.
+For this Phase 0 change, the umbrella suite passed 9 Core tests, 12 manufacturing tests, 6 Stock
+tests, and 5 web tests. This verifies the repository baseline and synthetic evaluation contracts,
+not the Debian/Ubuntu procedure or production-shaped benchmark targets.
 
 The Debian/Ubuntu package commands are derived from primary vendor documentation. They have not yet
 been executed by continuous integration on fresh VM images, so compatibility remains `partial`.

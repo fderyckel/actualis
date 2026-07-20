@@ -7,6 +7,7 @@ status: partial
 source_paths:
   - apps/actualis_manufacturing
   - apps/actualis_web
+  - evals/phase0
   - contracts/capabilities/manufacturing.move_pallet.v0.json
   - contracts/events/manufacturing.pallet_moved.v1.json
 test_paths:
@@ -100,6 +101,10 @@ The manufacturing suite verifies:
 The web suite separately verifies identity enforcement, transport execution and replay, and the
 OpenAPI route.
 
+The Phase 0 fixture suite verifies that the committed workload inputs are explicitly synthetic,
+deterministic, unique where required, and include duplicate, reconnect, and out-of-order cases. The
+command benchmark is an evaluation harness, not a production performance claim.
+
 ## Current gaps
 
 - Production identity and device authentication are absent.
@@ -123,7 +128,8 @@ These gaps are governed by the
 | Product projections | [`projection.ex`](../../../apps/actualis_manufacturing/lib/actualis_manufacturing/projection.ex) |
 | Migration ownership | [`migrations/`](../../../apps/actualis_manufacturing/priv/repo/migrations) |
 | Behavior tests | [`move_pallet_test.exs`](../../../apps/actualis_manufacturing/test/actualis_manufacturing/move_pallet_test.exs) |
+| Phase 0 evaluation inputs | [`evals/phase0/`](../../../evals/phase0) |
 | Transport adapter | [`actualis_controller.ex`](../../../apps/actualis_web/lib/actualis_web/controllers/actualis_controller.ex) |
 
-Verification on 2026-07-19: all 9 manufacturing and 5 web tests passed as part of the 21-test
-umbrella suite.
+Verification on 2026-07-19: all 12 manufacturing and 5 web tests passed as part of the 32-test
+umbrella suite, which also includes Core and Stock boundary tests.
